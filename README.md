@@ -1,18 +1,16 @@
-# MuJoCo-franka-panda
-**MuJoCo Simulation for Franka Emika Panda**  
-
-<img src="https://github.com/ARC-KIST/MuJoCo-franka-panda/assets/113012648/e9dcf0f8-5e37-40b0-8b10-f4aa8f386b1a" width="80%"/>  
+# Hybrid Dynamics FR3
+[Hybrid Dynamics Modeling for Franka Research 3 and Using RL for Compliance Control]
 
 </br></br>
 
 ## Installation
 __Essential 1.__ Clone the repository
 ```shell
-$ git clone https://github.com/ARC-KIST/MuJoCo-franka-panda.git franka-panda
+$ git clone https://github.com/S-CHOI-S/Hybrid-Dynamics-FR3.git hybridynamics
 ```
 
 __Essential 2.__ Install Dependencies
-> RBDL, GLFW etc. should be installed!
+> RBDL, GLFW, Pybind11 etc. should be installed!
 - [RBDL](https://github.com/rbdl/rbdl.git): C++ library that contains some essential and efficient rigid body dynamics algorithms.
   > For this project, we use version 3.2.0!
 
@@ -21,6 +19,7 @@ __Essential 2.__ Install Dependencies
   ```shell
   $ sudo apt-get install libglew-dev libglfw3-dev libglfw3
   ```
+- [Pybind11](https://github.com/pybind/pybind11.git): A lightweight header-only library that exposes C++ types in Python and vice versa, mainly to create Python bindings of existing C++ code.
 
 __Essential 3.__ Build the project
 > Make the **build** directory
@@ -37,15 +36,3 @@ $ cmake ..
 $ make
 ```
 
-__Essential 4.__ Check if it was installed correctly
-> Make sure you are in the build directory!
-```shell
-$ ./run
-```
-
-</br></br>
-### Written by:
-- 240702: [Sol Choi](https://github.com/S-CHOI-S)
-- 240904: [Sol Choi](https://github.com/S-CHOI-S)
-- 240929: [Sol Choi](https://github.com/S-CHOI-S)
-- 241011: [Sol Choi](https://github.com/S-CHOI-S)
