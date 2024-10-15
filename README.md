@@ -1,5 +1,5 @@
 # Hybrid Dynamics FR3
-[Hybrid Dynamics Modeling for Franka Research 3 and Using RL for Compliance Control]
+### Hybrid Dynamics Modeling for Franka Research 3 and Using RL for Compliance Control
 
 </br></br>
 
