@@ -1,4 +1,4 @@
-# Hybrid-Dynamics-FR3
+# Hybrid Dynamics Modeling for Manipulator and Using RL for Compliance Control
 #### [MEU5045] Estimation Theory And Applications (2024Y: Fall Semester) 
 <img src="https://github.com/user-attachments/assets/c2d0d1f9-51f4-4131-b816-9b2e8c89ea9a" width="80%" />
 
