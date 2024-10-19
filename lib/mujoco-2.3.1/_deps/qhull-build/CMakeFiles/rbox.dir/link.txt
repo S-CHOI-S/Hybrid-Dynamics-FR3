@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/rbox.dir/src/rbox/rbox.c.o  -o ../../bin/rbox  -Wl,-rpath,::: ../../lib/libqhullstatic.a -lm 

@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/user_eg2.dir/src/user_eg2/user_eg2_r.c.o  -o ../../bin/user_eg2  ../../lib/libqhullstatic_r.a -lm 

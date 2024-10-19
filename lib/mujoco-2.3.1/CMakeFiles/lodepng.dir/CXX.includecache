@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/lodepng-src/lodepng.cpp
+lodepng.h
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/lodepng-src/lodepng.h
+limits.h
+-
+stdio.h
+-
+stdlib.h
+-
+
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/lodepng-src/lodepng.h
+string.h
+-
+vector
+-
+string
+-
+lodepng.h
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/lodepng-src/lodepng.h
+iostream
+-
+lodepng.h
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/lodepng-src/lodepng.h
+

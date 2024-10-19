@@ -1,0 +1,50 @@
+<mujocoinclude>
+    <!-- assets_handle.xml에 정의해놓았던 mesh들을 여기서 사용할 거다! -->
+    <body name="base_h" pos="0 0 0">
+        <inertial diaginertia="0 0 0" mass="0" pos="0 0 0"/>
+
+        <body name="handle_base" pos="0 0 0">
+            <inertial pos="0 0 0" mass="2.7" diaginertia="0.1 0.1 0.1" />
+            <!-- class는 해당 geometry의 역할을 지정 -->
+                <!-- visual: 시각적인 요소, 시뮬레이션 환경에서 시각적으로 표시됨 -->
+                <!-- collision: 충돌 감지를 위한 요소, 시뮬레이션 중에 충돌을 감지하고, 충돌이 발생하는 경우 적절한 반응을 유발함 -->
+            <geom name = "handle_base" type="mesh" rgba="1 1 1 1" mesh="handle_base" class="visual" />
+            <geom name = "obj_contact0" type="mesh"  mesh="handle_base0" class="collision" />
+            <geom type="mesh" mesh="handle_base1" class="collision"/>
+            <body name="handle_handle" pos="0 0 0" >
+                <inertial pos="0 0 0" quat="0.365653 0.605347 -0.36522 0.605365" mass="0.1" diaginertia="0.1 0.1 0.1" />
+                <!-- frictionloss : 벨브의 뻑뻑한 정도 결정 키울수록 돌리기 힘듦 , stiffness : 다시 원래 각도로 돌아가려는성질 : 0으로 세팅 -->
+                <joint name="handle_joint" pos="0 0 0" axis="0 1 0" frictionloss="1" damping="0" limited="true" springref="0" stiffness="0" range="-7 7"/>
+                <geom name = "handle" type="mesh" rgba="1 0 0 1" mesh="handle" class="visual" friction="1 0.1 0.1"/>
+
+                <geom name = "handle_contact9" type="mesh"  mesh="handle9" class="collision"/><!--연결부-->
+                <geom name = "handle_contact13" type="mesh" mesh="handle13" class="collision" /><!--연결부-->
+                <geom name = "handle_contact14" type="mesh" mesh="handle14" class="collision"/><!--연결부-->
+                <geom name = "handle_contact17" type="mesh" mesh="handle17" class="collision"/><!--연결부-->
+                <geom name = "handle_contact20" type="mesh" mesh="handle20" class="collision"/><!--연결부-->
+
+                <geom name = "handle_contact4" type="mesh"  mesh="handle4" class="collision" /> <!--연결부십자가-->
+                <geom name = "handle_contact7" type="mesh"  mesh="handle7" class="collision"/> <!--연결부십자가-->       
+                <geom name = "handle_contact18" type="mesh" mesh="handle18" class="collision"/><!--연결부십자가-->
+                <geom name = "handle_contact19" type="mesh" mesh="handle19" class="collision"/><!--연결부십자가-->
+
+                <geom name = "handle_contact0" type="mesh"  mesh="handle0" class="collision" />
+                <geom name = "handle_contact1" type="mesh"  mesh="handle1" class="collision" />
+                <geom name = "handle_contact2" type="mesh"  mesh="handle2" class="collision"/>
+                <geom name = "handle_contact3" type="mesh"  mesh="handle3" class="collision"/>
+                <geom name = "handle_contact5" type="mesh"  mesh="handle5" class="collision" />
+                <geom name = "handle_contact6" type="mesh"  mesh="handle6" class="collision"/>
+                <geom name = "handle_contact8" type="mesh"  mesh="handle8" class="collision" /> 
+                <geom name = "handle_contact10" type="mesh" mesh="handle10" class="collision"/>
+                <geom name = "handle_contact11" type="mesh" mesh="handle11" class="collision"/>
+                <geom name = "handle_contact12" type="mesh" mesh="handle12" class="collision" /> 
+                <geom name = "handle_contact15" type="mesh" mesh="handle15" class="collision"/>
+                <geom name = "handle_contact16" type="mesh" mesh="handle16" class="collision" /> 
+                <geom name = "handle_contact21" type="mesh" mesh="handle21" class="collision"/>
+                <geom name = "handle_contact22" type="mesh" mesh="handle22" class="collision"/>
+                <geom name = "handle_contact23" type="mesh" mesh="handle23" class="collision"/>
+
+            </body>
+        </body>
+    </body>
+</mujocoinclude>

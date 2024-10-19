@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/testqset_r.dir/src/libqhull_r/qset_r.c.o CMakeFiles/testqset_r.dir/src/libqhull_r/mem_r.c.o CMakeFiles/testqset_r.dir/src/libqhull_r/usermem_r.c.o CMakeFiles/testqset_r.dir/src/testqset_r/testqset_r.c.o  -o ../../bin/testqset_r 

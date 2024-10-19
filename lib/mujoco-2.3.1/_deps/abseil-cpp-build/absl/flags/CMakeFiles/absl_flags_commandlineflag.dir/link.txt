@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../../lib/libabsl_flags_commandlineflag.a  CMakeFiles/absl_flags_commandlineflag.dir/commandlineflag.cc.o
+/usr/bin/ranlib ../../../../lib/libabsl_flags_commandlineflag.a

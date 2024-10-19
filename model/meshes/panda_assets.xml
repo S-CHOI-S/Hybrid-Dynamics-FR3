@@ -1,0 +1,86 @@
+ <mujocoinclude>
+     <compiler angle="radian" meshdir="meshes/" />
+    <size njmax="500" nconmax="100" />
+     <visual>
+        <global offwidth="3024" offheight="1680" />
+        <quality shadowsize="4096" offsamples="8" />
+        <map force="0.1" fogend="5" />
+    </visual>
+    <default class="main">
+<!--        <mesh scale="1 1 1" />-->
+        <!-- <joint limited="true" margin="0.01" armature="0.001" damping="0.05" frictionloss="0.001" /> -->
+        <joint limited="true" />
+        <geom friction="1 0.5 0.01" margin="0.0005" />
+        <site size="0.005 0 0" rgba="0.4 0.9 0.4 1" />
+
+    </default>
+     <asset>
+        <mesh name="link0" file="visual/link0_.stl" />
+        <mesh name="link1" file="visual/link1_.stl" />
+        <mesh name="link2" file="visual/link2_.stl" />
+        <mesh name="link3" file="visual/link3_.stl" />
+        <mesh name="link4" file="visual/link4_.stl" />
+        <mesh name="link5" file="visual/link5_.stl" />
+        <mesh name="link6" file="visual/link6_.stl" />
+        <mesh name="link7" file="collision/link7.stl" />
+        <mesh name="finger" file="visual/finger_.stl" />
+        <mesh name="hand" file="visual/hand_.stl" />
+        <mesh name="link0_c" file="collision/link0.stl" />
+        <mesh name="link1_c" file="collision/link1.stl" />
+        <mesh name="link2_c" file="collision/link2.stl" />
+        <mesh name="link3_c" file="collision/link3.stl" />
+        <mesh name="link4_c" file="collision/link4.stl" />
+        <mesh name="link5_c" file="collision/link5.stl" />
+        <mesh name="link6_c" file="collision/link6.stl" />
+        <mesh name="link7_c" file="collision/link7.stl" />
+        <mesh name="finger_c" file="collision/finger.stl" />
+        <mesh name="hand_c" file="collision/hand.stl" />
+        <mesh name="valve_base" file="objects/valve_base.STL" scale="7 7 7" />
+        <mesh name="valve" file="objects/valve.STL" scale="7 7 7" />
+         <mesh name="handle_base" file="objects/handle_base.STL" scale="7 7 7" />
+        <mesh name="handle" file="objects/handle.STL" scale="7 7 7" />
+    </asset>
+
+
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="-80.0 80.0" joint="panda_joint1" name="torque_j1"/>
+        <motor ctrllimited="true" ctrlrange="-80.0 80.0" joint="panda_joint2" name="torque_j2"/>
+        <motor ctrllimited="true" ctrlrange="-80.0 80.0" joint="panda_joint3" name="torque_j3"/>
+        <motor ctrllimited="true" ctrlrange="-80.0 80.0" joint="panda_joint4" name="torque_j4"/>
+        <motor ctrllimited="true" ctrlrange="-80.0 80.0" joint="panda_joint5" name="torque_j5"/>
+        <motor ctrllimited="true" ctrlrange="-12.0 12.0" joint="panda_joint6" name="torque_j6"/>
+        <motor ctrllimited="true" ctrlrange="-12.0 12.0" joint="panda_joint7" name="torque_j7"/>
+        <motor ctrllimited="true" ctrlrange="-1 1" joint="finger_joint1" name="actuator8"/>
+        <motor ctrllimited="true" ctrlrange="-1 1" joint="finger_joint2" name="actuator9"/>
+    </actuator>
+
+    <!-- <contact>
+        <exclude name="valve_contact" body1="valve_handle" body2="valve_joint"/>
+    </contact> -->
+
+    <contact>
+        <exclude name="valve_contact" body1="valve_base" body2="valve_handle"/>
+        <exclude name="handle_contact" body1="handle_base" body2="handle_handle"/>
+        <!-- <exclude name="gripper_contact" body1="left_finger" body2="right_finger"/> -->
+
+        <!-- <exclude name="check_targetpos0" body1="left_finger" body2="handle_base"/>
+        <exclude name="check_targetpos1" body1="right_finger" body2="handle_base"/>
+        <exclude name="check_targetpos2" body1="panda_link7" body2="handle_base"/>
+        <exclude name="check_targetpos3" body1="panda_link6" body2="handle_base"/> 
+        <exclude name="check_targetpos4" body1="left_finger" body2="handle_handle"/>
+        <exclude name="check_targetpos5" body1="right_finger" body2="handle_handle"/>
+        <exclude name="check_targetpos6" body1="panda_link7" body2="handle_handle"/>
+        <exclude name="check_targetpos7" body1="panda_link6" body2="handle_handle"/> -->
+    </contact>
+     <!-- <contact>
+        <exclude name="handle_contact" body1="handle_base" body2="handle"/>
+    </contact>
+    <contact>
+        <exclude name="gripper_contact" body1="left_finger" body2="right_finger"/>
+    </contact> -->
+
+  <!-- <keyframe>
+    <key name="initial" qpos="0 0 0 0 0 0.523599 0 0 0">
+  </keyframe> -->
+
+ </mujocoinclude>

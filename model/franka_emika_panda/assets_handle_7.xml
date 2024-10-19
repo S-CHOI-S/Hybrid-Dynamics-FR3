@@ -1,0 +1,52 @@
+
+            <mujocoinclude>
+                <compiler angle="radian" meshdir="meshes/" autolimits="true"/>
+                <size njmax="500" nconmax="100" />
+                <visual>
+                    <global offwidth="3024" offheight="1680" />
+                    <quality shadowsize="4096" offsamples="8" />
+                    <map force="0.1" fogend="5" />
+                </visual>
+                
+                
+                <asset>
+                
+                    <mesh name="handle_base" file="objects/handle_base.STL" scale="7 7 7"/>
+                    <mesh name="handle_base0" file="objects/handle_base/handle_base000.obj" scale="7 7 7"/>
+                    <mesh name="handle_base1" file="objects/handle_base/handle_base001.obj" scale="7 7 7"/>
+                    
+                    <mesh name="handle" file="objects/handle.STL" scale="7 7 7"/>
+                    
+                    
+                    <mesh name="handle0" file="objects/handle2/handle000.obj" scale="7 7 7"/>
+                    <mesh name="handle1" file="objects/handle2/handle001.obj" scale="7 7 7"/>
+                    <mesh name="handle2" file="objects/handle2/handle002.obj" scale="7 7 7"/>
+                    <mesh name="handle3" file="objects/handle2/handle003.obj" scale="7 7 7"/>
+                    <mesh name="handle4" file="objects/handle2/handle004.obj" scale="7 7 7"/>
+                    <mesh name="handle5" file="objects/handle2/handle005.obj" scale="7 7 7"/>
+                    <mesh name="handle6" file="objects/handle2/handle006.obj" scale="7 7 7"/>
+                    <mesh name="handle7" file="objects/handle2/handle007.obj" scale="7 7 7"/>
+                    <mesh name="handle8" file="objects/handle2/handle008.obj" scale="7 7 7"/>
+                    <mesh name="handle9" file="objects/handle2/handle009.obj" scale="7 7 7"/>
+                    <mesh name="handle10" file="objects/handle2/handle010.obj" scale="7 7 7"/>
+                    <mesh name="handle11" file="objects/handle2/handle011.obj" scale="7 7 7"/>
+                    <mesh name="handle12" file="objects/handle2/handle012.obj" scale="7 7 7"/>
+                    <mesh name="handle13" file="objects/handle2/handle013.obj" scale="7 7 7"/>
+                    <mesh name="handle14" file="objects/handle2/handle014.obj" scale="7 7 7"/>
+                    <mesh name="handle15" file="objects/handle2/handle015.obj" scale="7 7 7"/>
+                    <mesh name="handle16" file="objects/handle2/handle016.obj" scale="7 7 7"/>
+                    <mesh name="handle17" file="objects/handle2/handle017.obj" scale="7 7 7"/>
+                    <mesh name="handle18" file="objects/handle2/handle018.obj" scale="7 7 7"/>
+                    <mesh name="handle19" file="objects/handle2/handle019.obj" scale="7 7 7"/>
+                    <mesh name="handle20" file="objects/handle2/handle020.obj" scale="7 7 7"/>
+                    <mesh name="handle21" file="objects/handle2/handle021.obj" scale="7 7 7"/>
+                    <mesh name="handle22" file="objects/handle2/handle022.obj" scale="7 7 7"/>
+                    <mesh name="handle23" file="objects/handle2/handle023.obj" scale="7 7 7"/>
+                </asset>
+                
+                <contact>
+                    <exclude name="handle_contact" body1="handle_base" body2="handle_handle"/>
+                </contact>
+            
+            </mujocoinclude>
+        

@@ -1,0 +1,15 @@
+<mujocoinclude>
+    <compiler angle="radian" meshdir="meshes/" autolimits="true" />
+    <asset>
+        <mesh name="handle" file="cabinet/handle.stl" />
+        <!-- <mesh name="handle0" file="handle000.obj" />
+        <mesh name="handle1" file="handle001.obj" />
+        <mesh name="handle2" file="handle002.obj" /> -->
+        <mesh name="handle1" file="cabinet/handle002.obj" />
+        <mesh name="handle2" file="cabinet/handle000.obj" />
+        <mesh name="handle3" file="cabinet/handle001.obj" />
+
+
+        <mesh name="valve" file="objects/handle.STL" scale="7 7 7"/>
+    </asset>
+</mujocoinclude>

@@ -1,0 +1,30 @@
+<mujocoinclude>
+    <compiler angle="radian" meshdir="meshes/" autolimits="true"/>
+    <!-- <compiler angle="radian" meshdir="meshes/"> -->
+  <size njmax="500" nconmax="100" />
+    <visual>
+      <global offwidth="3024" offheight="1680" />
+      <quality shadowsize="4096" offsamples="8" />
+      <map force="0.1" fogend="5" />
+  </visual>
+
+<asset>
+  <mesh name="valve_base" file="objects/valve_base.STL" scale="12 12 12"/>
+  <mesh name="valve_base0" file="objects/valve_base/valve_base000.obj" scale="12 12 12"/>
+  <mesh name="valve_base1" file="objects/valve_base/valve_base001.obj" scale="12 12 12"/>
+  <mesh name="valve_base2" file="objects/valve_base/valve_base002.obj" scale="12 12 12"/>
+  <mesh name="valve_base3" file="objects/valve_base/valve_base003.obj" scale="12 12 12"/>
+  <mesh name="valve_base4" file="objects/valve_base/valve_base004.obj" scale="12 12 12"/>
+
+  <mesh name="valve" file="objects/valve.STL" scale="12 12 12"/>
+  <mesh name="valve0" file="objects/valve/valve000.obj" scale="12 12 12"/>
+  <mesh name="valve1" file="objects/valve/valve001.obj" scale="12 12 12"/>
+  <mesh name="valve2" file="objects/valve/valve002.obj" scale="12 12 12"/>
+</asset>
+
+<contact>
+    <exclude name="valve_contact" body1="valve_base" body2="valve_handle"/>
+</contact>
+
+
+</mujocoinclude>

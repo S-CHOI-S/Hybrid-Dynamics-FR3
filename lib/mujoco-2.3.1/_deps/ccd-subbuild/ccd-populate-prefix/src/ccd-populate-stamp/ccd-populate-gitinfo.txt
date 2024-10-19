@@ -1,0 +1,3 @@
+repository='https://github.com/danfis/libccd.git'
+module=''
+tag='origin'

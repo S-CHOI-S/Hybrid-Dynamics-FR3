@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/qhull.dir/src/qhull/unix_r.c.o  -o ../../bin/qhull  -Wl,-rpath,::: ../../lib/libqhullstatic_r.a -lm 

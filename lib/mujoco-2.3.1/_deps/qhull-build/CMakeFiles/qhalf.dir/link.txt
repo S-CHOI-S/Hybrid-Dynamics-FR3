@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/qhalf.dir/src/qhalf/qhalf.c.o  -o ../../bin/qhalf  -Wl,-rpath,::: ../../lib/libqhullstatic.a -lm 

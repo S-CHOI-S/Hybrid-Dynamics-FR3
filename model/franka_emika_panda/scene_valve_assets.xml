@@ -1,0 +1,285 @@
+ <mujocoinclude>
+     <compiler angle="radian" meshdir="meshes/" autolimits="true"/>
+     <!-- <compiler angle="radian" meshdir="meshes/"> -->
+    <size njmax="500" nconmax="100" />
+     <visual>
+        <global offwidth="3024" offheight="1680" />
+        <quality shadowsize="4096" offsamples="8" />
+        <map force="0.1" fogend="5" />
+    </visual>
+  <default>
+    <default class="panda">
+      <material specular="0.5" shininess="0.25"/>
+      <!-- <joint armature="0.5" frictionloss="0.5" damping="1" axis="0 0 1" range="-2.8973 2.8973"/> -->
+      <joint armature="0.1" damping="1" axis="0 0 1"/>
+      <!-- <general dyntype="none" biastype="affine" ctrlrange="-2.8973 2.8973" forcerange="-87 87"/> -->
+      <default class="finger">
+        <joint axis="0 1 0" type="slide" range="0 0.04"/>
+      </default>
+
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/> 
+      </default>
+
+
+
+      <default class="collision">
+        <geom type="mesh" group="3"/>
+        <default class="fingertip_pad_collision_1">
+          <geom type="box" size="0.0085 0.004 0.0085" pos="0 0.0055 0.0445"/>
+        </default>
+        <default class="fingertip_pad_collision_2">
+          <geom type="box" size="0.003 0.002 0.003" pos="0.0055 0.002 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_3">
+          <geom type="box" size="0.003 0.002 0.003" pos="-0.0055 0.002 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_4">
+          <geom type="box" size="0.003 0.002 0.0035" pos="0.0055 0.002 0.0395"/>
+        </default>
+        <default class="fingertip_pad_collision_5">
+          <geom type="box" size="0.003 0.002 0.0035" pos="-0.0055 0.002 0.0395"/>
+        </default>
+      </default>
+    </default>
+  </default>
+
+
+  <asset>
+
+    <!-- panda 210 -->
+    <!-- <mesh name="link0" file="visual/link0_.stl"/>
+    <mesh name="link1" file="visual/link1_.stl"/>
+    <mesh name="link2" file="visual/link2_.stl"/>
+    <mesh name="link3" file="visual/link3_.stl"/>
+    <mesh name="link4" file="visual/link4_.stl"/>
+    <mesh name="link5" file="visual/link5_.stl"/>
+    <mesh name="link6" file="visual/link6_.stl"/>
+    <mesh name="link7" file="collision/link7.stl"/>
+    <mesh name="finger" file="visual/finger_.stl"/>
+    <mesh name="hand" file="visual/hand_.stl"/> -->
+
+    <!-- panda 231 -->
+    <material class="panda" name="white" rgba="1 1 1 1"/>
+    <material class="panda" name="off_white" rgba="0.901961 0.921569 0.929412 1"/>
+    <material class="panda" name="black" rgba="0.25 0.25 0.25 1"/>
+    <material class="panda" name="green" rgba="0 1 0 1"/>
+    <material class="panda" name="light_blue" rgba="0.039216 0.541176 0.780392 1"/>
+
+    
+    <!-- Collision meshes -->
+    <mesh name="link0_c" file="assets/link0.stl"/>
+    <mesh name="link1_c" file="assets/link1.stl"/>
+    <mesh name="link2_c" file="assets/link2.stl"/>
+    <mesh name="link3_c" file="assets/link3.stl"/>
+    <mesh name="link4_c" file="assets/link4.stl"/>
+    <mesh name="link5_c0" file="assets/link5_collision_0.obj"/>
+    <mesh name="link5_c1" file="assets/link5_collision_1.obj"/>
+    <mesh name="link5_c2" file="assets/link5_collision_2.obj"/>
+    <mesh name="link6_c" file="assets/link6.stl"/>
+    <mesh name="link7_c" file="assets/link7.stl"/>
+    <mesh name="hand_c" file="assets/hand.stl"/>
+
+    <!-- Visual meshes -->
+    <mesh file="assets/link0_0.obj"/>
+    <mesh file="assets/link0_1.obj"/>
+    <mesh file="assets/link0_2.obj"/>
+    <mesh file="assets/link0_3.obj"/>
+    <mesh file="assets/link0_4.obj"/>
+    <mesh file="assets/link0_5.obj"/>
+    <mesh file="assets/link0_7.obj"/>
+    <mesh file="assets/link0_8.obj"/>
+    <mesh file="assets/link0_9.obj"/>
+    <mesh file="assets/link0_10.obj"/>
+    <mesh file="assets/link0_11.obj"/>
+    <mesh file="assets/link1.obj"/>
+    <mesh file="assets/link2.obj"/>
+    <mesh file="assets/link3_0.obj"/>
+    <mesh file="assets/link3_1.obj"/>
+    <mesh file="assets/link3_2.obj"/>
+    <mesh file="assets/link3_3.obj"/>
+    <mesh file="assets/link4_0.obj"/>
+    <mesh file="assets/link4_1.obj"/>
+    <mesh file="assets/link4_2.obj"/>
+    <mesh file="assets/link4_3.obj"/>
+    <mesh file="assets/link5_0.obj"/>
+    <mesh file="assets/link5_1.obj"/>
+    <mesh file="assets/link5_2.obj"/>
+    <mesh file="assets/link6_0.obj"/>
+    <mesh file="assets/link6_1.obj"/>
+    <mesh file="assets/link6_2.obj"/>
+    <mesh file="assets/link6_3.obj"/>
+    <mesh file="assets/link6_4.obj"/>
+    <mesh file="assets/link6_5.obj"/>
+    <mesh file="assets/link6_6.obj"/>
+    <mesh file="assets/link6_7.obj"/>
+    <mesh file="assets/link6_8.obj"/>
+    <mesh file="assets/link6_9.obj"/>
+    <mesh file="assets/link6_10.obj"/>
+    <mesh file="assets/link6_11.obj"/>
+    <mesh file="assets/link6_12.obj"/>
+    <mesh file="assets/link6_13.obj"/>
+    <mesh file="assets/link6_14.obj"/>
+    <mesh file="assets/link6_15.obj"/>
+    <mesh file="assets/link6_16.obj"/>
+    <mesh file="assets/link7_0.obj"/>
+    <mesh file="assets/link7_1.obj"/>
+    <mesh file="assets/link7_2.obj"/>
+    <mesh file="assets/link7_3.obj"/>
+    <mesh file="assets/link7_4.obj"/>
+    <mesh file="assets/link7_5.obj"/>
+    <mesh file="assets/link7_6.obj"/>
+    <mesh file="assets/link7_7.obj"/>
+    <mesh file="assets/hand_0.obj"/>
+    <mesh file="assets/hand_1.obj"/>
+    <mesh file="assets/hand_2.obj"/>
+    <mesh file="assets/hand_3.obj"/>
+    <mesh file="assets/hand_4.obj"/>
+    <mesh file="assets/finger_0.obj"/>
+    <mesh file="assets/finger_1.obj"/>
+
+
+
+
+    <mesh name="valve_base" file="objects/valve_base.STL" scale="7 7 7"/>
+    <mesh name="valve_base0" file="objects/valve_base/valve_base000.obj" scale="7 7 7"/>
+    <mesh name="valve_base1" file="objects/valve_base/valve_base001.obj" scale="7 7 7"/>
+    <mesh name="valve_base2" file="objects/valve_base/valve_base002.obj" scale="7 7 7"/>
+    <mesh name="valve_base3" file="objects/valve_base/valve_base003.obj" scale="7 7 7"/>
+    <mesh name="valve_base4" file="objects/valve_base/valve_base004.obj" scale="7 7 7"/>
+
+    <mesh name="valve" file="objects/valve.STL" scale="7 7 7"/>
+    <mesh name="valve0" file="objects/valve/valve000.obj" scale="7 7 7"/>
+    <mesh name="valve1" file="objects/valve/valve001.obj" scale="7 7 7"/>
+    <mesh name="valve2" file="objects/valve/valve002.obj" scale="7 7 7"/>
+
+    <mesh name="handle_base" file="objects/handle_base.STL" scale="7 7 7"/>
+    <mesh name="handle_base0" file="objects/handle_base/handle_base000.obj" scale="7 7 7"/>
+    <mesh name="handle_base1" file="objects/handle_base/handle_base001.obj" scale="7 7 7"/>
+
+    <mesh name="handle" file="objects/handle.STL" scale="7 7 7"/>
+    <!-- <mesh name="handle0" file="objects/handle/handle2000.obj" scale="7 7 7"/>
+    <mesh name="handle1" file="objects/handle/handle2001.obj" scale="7 7 7"/>
+    <mesh name="handle2" file="objects/handle/handle2002.obj" scale="7 7 7"/>
+    <mesh name="handle3" file="objects/handle/handle2003.obj" scale="7 7 7"/>
+    <mesh name="handle4" file="objects/handle/handle2004.obj" scale="7 7 7"/>
+    <mesh name="handle5" file="objects/handle/handle2005.obj" scale="7 7 7"/>
+    <mesh name="handle6" file="objects/handle/handle2006.obj" scale="7 7 7"/>
+    <mesh name="handle7" file="objects/handle/handle2007.obj" scale="7 7 7"/>
+    <mesh name="handle8" file="objects/handle/handle2008.obj" scale="7 7 7"/>
+    <mesh name="handle9" file="objects/handle/handle2009.obj" scale="7 7 7"/>
+    <mesh name="handle10" file="objects/handle/handle2010.obj" scale="7 7 7"/>
+    <mesh name="handle11" file="objects/handle/handle2011.obj" scale="7 7 7"/>
+    <mesh name="handle12" file="objects/handle/handle2012.obj" scale="7 7 7"/>
+    <mesh name="handle13" file="objects/handle/handle2013.obj" scale="7 7 7"/>
+    <mesh name="handle14" file="objects/handle/handle2014.obj" scale="7 7 7"/>
+    <mesh name="handle15" file="objects/handle/handle2015.obj" scale="7 7 7"/> -->
+
+    <mesh name="handle0" file="objects/handle2/handle000.obj" scale="7 7 7"/>
+    <mesh name="handle1" file="objects/handle2/handle001.obj" scale="7 7 7"/>
+    <mesh name="handle2" file="objects/handle2/handle002.obj" scale="7 7 7"/>
+    <mesh name="handle3" file="objects/handle2/handle003.obj" scale="7 7 7"/>
+    <mesh name="handle4" file="objects/handle2/handle004.obj" scale="7 7 7"/>
+    <mesh name="handle5" file="objects/handle2/handle005.obj" scale="7 7 7"/>
+    <mesh name="handle6" file="objects/handle2/handle006.obj" scale="7 7 7"/>
+    <mesh name="handle7" file="objects/handle2/handle007.obj" scale="7 7 7"/>
+    <mesh name="handle8" file="objects/handle2/handle008.obj" scale="7 7 7"/>
+    <mesh name="handle9" file="objects/handle2/handle009.obj" scale="7 7 7"/>
+    <mesh name="handle10" file="objects/handle2/handle010.obj" scale="7 7 7"/>
+    <mesh name="handle11" file="objects/handle2/handle011.obj" scale="7 7 7"/>
+    <mesh name="handle12" file="objects/handle2/handle012.obj" scale="7 7 7"/>
+    <mesh name="handle13" file="objects/handle2/handle013.obj" scale="7 7 7"/>
+    <mesh name="handle14" file="objects/handle2/handle014.obj" scale="7 7 7"/>
+    <mesh name="handle15" file="objects/handle2/handle015.obj" scale="7 7 7"/>
+    <mesh name="handle16" file="objects/handle2/handle016.obj" scale="7 7 7"/>
+    <mesh name="handle17" file="objects/handle2/handle017.obj" scale="7 7 7"/>
+    <mesh name="handle18" file="objects/handle2/handle018.obj" scale="7 7 7"/>
+    <mesh name="handle19" file="objects/handle2/handle019.obj" scale="7 7 7"/>
+    <mesh name="handle20" file="objects/handle2/handle020.obj" scale="7 7 7"/>
+    <mesh name="handle21" file="objects/handle2/handle021.obj" scale="7 7 7"/>
+    <mesh name="handle22" file="objects/handle2/handle022.obj" scale="7 7 7"/>
+    <mesh name="handle23" file="objects/handle2/handle023.obj" scale="7 7 7"/>
+  </asset>
+  <tendon>
+    <fixed name="split">
+      <joint joint="finger_joint1" coef="0.5"/>
+      <joint joint="finger_joint2" coef="0.5"/>
+    </fixed>
+  </tendon>
+
+  <equality>
+    <joint joint1="finger_joint1" joint2="finger_joint2" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+  </equality>
+
+  <!-- <actuator>
+    <general class="panda" name="actuator1" joint="joint1" gainprm="4500" biasprm="0 -4500 -450"/>
+    <general class="panda" name="actuator2" joint="joint2" gainprm="4500" biasprm="0 -4500 -450"
+      ctrlrange="-1.7628 1.7628"/>
+    <general class="panda" name="actuator3" joint="joint3" gainprm="3500" biasprm="0 -3500 -350"/>
+    <general class="panda" name="actuator4" joint="joint4" gainprm="3500" biasprm="0 -3500 -350"
+      ctrlrange="-3.0718 -0.0698"/>
+    <general class="panda" name="actuator5" joint="joint5" gainprm="2000" biasprm="0 -2000 -200" forcerange="-12 12"/>
+    <general class="panda" name="actuator6" joint="joint6" gainprm="2000" biasprm="0 -2000 -200" forcerange="-12 12"
+      ctrlrange="-0.0175 3.7525"/>
+    <general class="panda" name="actuator7" joint="joint7" gainprm="2000" biasprm="0 -2000 -200" forcerange="-12 12"/>
+    <general class="panda" name="actuator8" tendon="split" forcerange="-100 100" ctrlrange="0 255"
+      gainprm="0.01568627451 0 0" biasprm="0 -100 -10"/>
+  </actuator> -->
+
+  <actuator>
+    <motor ctrllimited="true" ctrlrange="-87.0 87.0" joint="joint1" name="actuator1"/>
+    <motor ctrllimited="true" ctrlrange="-87.0 87.0" joint="joint2" name="actuator2"/>
+    <motor ctrllimited="true" ctrlrange="-87.0 87.0" joint="joint3" name="actuator3"/>
+    <motor ctrllimited="true" ctrlrange="-87.0 87.0" joint="joint4" name="actuator4"/>
+    <motor ctrllimited="true" ctrlrange="-12.0 12.0" joint="joint5" name="actuator5"/>
+    <motor ctrllimited="true" ctrlrange="-12.0 12.0" joint="joint6" name="actuator6"/>
+    <motor ctrllimited="true" ctrlrange="-12.0 12.0" joint="joint7" name="actuator7"/>
+    <motor ctrllimited="true" tendon="split" forcerange="-100 100" ctrlrange="-255 255" name="actuator8"/>
+    <!-- <motor ctrllimited="true" ctrlrange="-255 255" joint="finger_joint2" name="actuator9"/> -->
+    <!-- <general class="panda" name="actuator8" tendon="split" forcerange="-100 100" ctrlrange="0 255"
+      gainprm="0.01568627451 0 0" biasprm="0 -100 -10"/> -->
+  </actuator>
+
+    <!-- <contact>
+        <exclude name="valve_contact" body1="valve_handle" body2="valve_joint"/>
+    </contact> -->
+
+    <contact>
+        <exclude name="valve_contact" body1="valve_base" body2="valve_handle"/>
+        <exclude name="handle_contact" body1="handle_base" body2="handle_handle"/>
+        <exclude name="gripper_contact" body1="left_finger" body2="right_finger"/>
+
+        <!-- <exclude name="panda_check_targetpos0" body1="left_finger" body2="handle_base"/>
+        <exclude name="panda_check_targetpos1" body1="right_finger" body2="handle_base"/>
+        <exclude name="panda_check_targetpos2" body1="link7" body2="handle_base"/>
+        <exclude name="panda_check_targetpos3" body1="link6" body2="handle_base"/> 
+        <exclude body1="link5" body2="handle_base"/> 
+        <exclude body1="link5" body2="handle_handle"/> 
+        <exclude body1="link4" body2="handle_base"/> 
+        <exclude body1="link4" body2="handle_base"/> 
+        <exclude name="panda_check_targetpos4" body1="left_finger" body2="handle_handle"/>
+        <exclude name="panda_check_targetpos5" body1="right_finger" body2="handle_handle"/>
+        <exclude name="panda_check_targetpos6" body1="link7" body2="handle_handle"/>
+        <exclude name="panda_check_targetpos7" body1="link6" body2="handle_handle"/>
+        <exclude name="panda_check_targetpos8" body1="hand" body2="handle_base"/>
+        <exclude name="panda_check_targetpos9" body1="hand" body2="handle_handle"/> 
+        <exclude name="panda_check_targetpos10" body1="hand" body2="handle_handle"/>
+        <exclude name="panda_check_targetpos11" body1="hand" body2="handle_handle"/>
+
+        <exclude name="check_targetpos00" body1="hand" body2="valve_base"/>
+        <exclude name="check_targetpos0" body1="left_finger" body2="valve_base"/>
+        <exclude name="check_targetpos1" body1="right_finger" body2="valve_base"/>
+        <exclude name="check_targetpos2" body1="link7" body2="valve_base"/>
+        <exclude name="check_targetpos3" body1="link6" body2="valve_base"/> 
+        <exclude name="check_targetpos4" body1="hand" body2="valve_handle"/>
+        <exclude name="check_targetpos44" body1="left_finger" body2="valve_handle"/>
+        <exclude name="check_targetpos5" body1="right_finger" body2="valve_handle"/>
+        <exclude name="check_targetpos6" body1="link7" body2="valve_handle"/>
+        <exclude name="check_targetpos7" body1="link6" body2="valve_handle"/> -->
+    </contact>
+
+  <!-- <keyframe>
+    <key name="initial" qpos="0.374 -1.02 0.245 -1.51 0.0102 0.655  0.3 0.04 0.04 0 0">
+  </keyframe> -->
+
+ </mujocoinclude>

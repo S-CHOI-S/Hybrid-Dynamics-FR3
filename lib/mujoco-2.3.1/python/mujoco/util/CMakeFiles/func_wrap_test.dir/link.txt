@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/func_wrap_test.dir/func_wrap_test.cc.o  -o ../../../bin/func_wrap_test  ../../../lib/libgmock.a ../../../lib/libgtest_main.a ../../../lib/libgtest.a -pthread 

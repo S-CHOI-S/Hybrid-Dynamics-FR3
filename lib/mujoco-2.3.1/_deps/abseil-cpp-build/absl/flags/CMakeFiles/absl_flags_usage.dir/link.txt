@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../../lib/libabsl_flags_usage.a  CMakeFiles/absl_flags_usage.dir/usage.cc.o
+/usr/bin/ranlib ../../../../lib/libabsl_flags_usage.a

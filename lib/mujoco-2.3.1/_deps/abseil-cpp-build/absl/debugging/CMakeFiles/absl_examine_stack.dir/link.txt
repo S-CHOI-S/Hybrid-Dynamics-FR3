@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../../lib/libabsl_examine_stack.a  CMakeFiles/absl_examine_stack.dir/internal/examine_stack.cc.o
+/usr/bin/ranlib ../../../../lib/libabsl_examine_stack.a

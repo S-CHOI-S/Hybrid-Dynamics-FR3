@@ -1,0 +1,59 @@
+<mujoco model="round_valve">
+    <compiler angle="radian" meshdir="meshes/objects/" />
+<!--    <option tolerance="1e-06" collision="predefined" cone="elliptic" jacobian="sparse" solver="CG" iterations="30" />-->
+<!--    <size njmax="500" nconmax="100" />-->
+    <asset>
+        <mesh name="link0" file="handle_base.STL" scale="7 7 7"/>
+        <mesh name="link1" file="handle.STL"scale="7 7 7" />
+        <mesh name="valve_base" file="valve_base.STL" scale="7 7 7"/>
+        <mesh name="valve" file="valve.STL" scale="7 7 7"/>
+<!--        <mesh name="collision0" file="handle_base_c.STL" />-->
+<!--        <mesh name="collision1" file="handle_c.STL" />-->
+    </asset>
+    <worldbody>
+        <!-- 로봇의 위치 결정 ! 아래 pos  -->
+        <body name="base" pos="0 0 0">
+            <inertial diaginertia="0 0 0" mass="0" pos="0 0 0"/>
+    <!--        <geom mesh="link0_c" class="collision"/>-->
+            <body name="link0" pos="0 0 0">
+                <inertial pos="0 0 0" mass="2.7" diaginertia="0.1 0.1 0.1" />
+<!--                <joint name="joint0" pos="0 0 0" axis="0 0 1" limited="true" range="-2.9671 2.9671" />-->
+                <geom type="mesh" rgba="1 1 1 1" mesh="link0" />
+                <body name="valve" pos="0 0 0" >
+                    <inertial pos="0 0.0 0" quat="0.365653 0.605347 -0.36522 0.605365" mass="0.1" diaginertia="0.1 0.1 0.1" />
+                    <joint name="latch_joint" pos="0 0 0" axis="0 1 0" range="-3.14 3.14" frictionloss="0.1" damping="0" limited="false" springref="0" stiffness="1" />
+                    <geom type="mesh" rgba="1 1 1 1" mesh="link1" />
+<!--                    <joint name="latch_joint" pos="0 0 0" axis="0 1 0" range="-1.57 1.57" frictionloss="0.1" damping="0" limited="true" springref="0" stiffness="1" />-->
+<!--                    <geom fromto="0 0.0625 0 0 -0.125 0" size="0.025" type="cylinder" group="0" name="handle_base"/>-->
+
+                </body>
+            </body>
+        </body>
+        <body name="base_v" pos="1 0 0">
+            <inertial diaginertia="0 0 0" mass="0" pos="0 0 0"/>
+            <!--        <geom mesh="link0_c" class="collision"/>-->
+            <body name="valve_base" pos="0 0 0">
+    <!--            <mesh scale="10 10 10" />-->
+                <inertial pos="0 0 0" mass="2.7" diaginertia="0.1 0.1 0.1" />
+            <!--                <joint name="joint0" pos="0 0 0" axis="0 0 1" limited="true" range="-2.9671 2.9671" />-->
+                <geom type="mesh" rgba="1 1 1 1" mesh="valve_base" />
+                <body name="valve_handle" pos="0 0 0" >
+                    <inertial pos="0 0 0" quat="0.365653 0.605347 -0.36522 0.605365" mass="0.1" diaginertia="0.0483771 0.0410001 0.0111013"/>
+                    <joint name="valve_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" frictionloss="1" damping="0" limited="false" springref="0" stiffness="0" />
+                    <!-- <joint name="valve_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" frictionloss="5" damping="0" limited="false" /> -->
+                    <geom type="mesh" rgba="1 1 1 1" mesh="valve" />
+                </body>
+            </body>
+        </body>
+
+         <body name="ball">
+            <geom size="0.01" pos="0.11530057818  0.149  -0.02944107115  " quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" />
+        
+        </body>
+
+    </worldbody>
+
+
+
+</mujoco>
+

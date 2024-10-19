@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../../lib/libabsl_int128.a  CMakeFiles/absl_int128.dir/int128.cc.o
+/usr/bin/ranlib ../../../../lib/libabsl_int128.a

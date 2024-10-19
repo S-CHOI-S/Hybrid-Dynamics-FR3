@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/tuple_tools_test.dir/tuple_tools_test.cc.o  -o ../../../bin/tuple_tools_test  ../../../lib/libgmock.a ../../../lib/libgtest_main.a ../../../lib/libgtest.a -pthread 

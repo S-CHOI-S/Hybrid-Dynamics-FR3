@@ -1,0 +1,73 @@
+<mujoco model='Panda_valve'>
+    <!-- ======= WORLD ======= -->
+    <option timestep = '0.001'/>
+    <worldbody>
+        <!-- ground plane -->
+        <light directional='false' diffuse='.7 .7 .7' specular='0.03 0.03 0.03' pos='-1 -1.0 4.0' dir='1 1.0 -4'/>
+        <geom name='ground' size="1.5 1.5 0.25" pos="0 0 0" type="plane" contype="1" conaffinity="0"/>
+        <camera name="fixed" pos="0 0 1.5" quat="0 0 0 1" />
+        <!-- Cameras for the VIL paper -->
+        <!-- <camera name="vil_camera" pos="0 -1.2 2" quat="0.92388 0.382683 0 0" />
+        <camera name="view_1" pos="1.2 -1. 0.5" euler="1. 0.7 0.5" />
+        <camera name="view_2" pos="0 0.5 0.2" euler="-1.57 0 3.14" />
+        <camera name="view_3" pos="0 0.2 -0.2" euler="-2.35 0 3.14" />
+        <camera name="view_4" pos="0.8 -0.8 0.8" euler="0.785 0.785 0.785" />
+        <camera name="view_5" pos="0 -0.25 -0.4" euler="-3.2 0 3.14" /> -->
+
+        <!-- franka panda -->
+        <body name="fr3" pos="0 0 0">
+            <include file="mjinclude_fr3.xml"/>
+        </body>
+
+        <!-- ======= TABLE ======= --> <!-- table이 있고 없고의 차이? 육안으로 보기에는 없어도 상관 없어 보임-->
+        <body name="table">
+            <geom size="0.45 0.45 0.025" pos="0 0 -0.225" type="box"/>
+            <geom size="0.04 0.25" pos="0.4 0.4 -0.501" quat="0 1 0 0" type="cylinder" contype="0" conaffinity="0" />
+            <geom size="0.04 0.25" pos="-0.4 0.4 -0.501" quat="0 1 0 0" type="cylinder" contype="0" conaffinity="0" />
+            <geom size="0.04 0.25" pos="0.4 -0.4 -0.501" quat="0 1 0 0" type="cylinder" contype="0" conaffinity="0" />
+            <geom size="0.04 0.25" pos="-0.4 -0.4 -0.501" quat="0 1 0 0" type="cylinder" contype="0" conaffinity="0" />
+        </body>
+
+        <body name="valve" pos="0.38 -1 .45" axisangle="1 0 0 3.14">
+            <inertial diaginertia="0 0 0" mass="1" pos="0 0 0"/>
+            <include file="mjinclude_valve.xml"/>
+        </body>
+
+        <!-- ======= handle ======= -->
+        <body name="handle" pos="0.580994101778967 -0.045675755104744684 0.115" quat=" 0.70710678 0.70710678 0.         0.       ">
+            <inertial diaginertia="0 0 0" mass="1" pos="0 0 0"/>
+            <include file="mjinclude_handle.xml"/>
+        </body>
+        
+        <!-- ======= POSITION CHECK ======= -->
+        <!-- <body name="ball">
+            <geom size="0.02" pos="0.38 0. 0.45" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1" />
+            <geom size="0.01" pos="-0.2 0.5 0.6" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1"/>
+            <geom size="0.02" pos="0.28 0. 0.7" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1"/>
+            <geom size="0.01" pos="0.38 0. 0.5" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1"/>
+            <geom size="0.02" pos="0.48 0. 0.55" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1"/>
+            <geom size="0.01" pos="0.3 0.3 0.6" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="1 1 1 1"/>
+            
+
+            <geom size="0.02" pos="0.52 0 0.8" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1" />
+            <geom size="0.01" pos="0.38 0 0.9" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+            <geom size="0.02" pos="0.326 0.232 0.559" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+            <geom size="0.01" pos="0.4 0.3 0.5" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+            <geom size="0.02" pos="0.35 0.45 0.9" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+            <geom size="0.01" pos="0.48 0 0.9" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+            <geom size="0.01" pos="0.48 0 0.9" quat="0 1 0 0" type="sphere" contype="0" conaffinity="0" rgba="0 1 1 1"/>
+             
+        </body> -->
+
+    </worldbody>
+
+    <!-- <include file='scene_valve_assets.xml'/> -->
+    <include file='assets_fr3.xml'/>
+    <include file='assets_valve.xml'/>
+    <include file='assets_handle.xml'/>
+
+</mujoco>
+
+<!-- <keyframe>
+    <key name="initial" time = "0", qpos="0.374 -1.02 0.245 -1.51 0.0102 0.655  0.3 0.04 0.04 0 0">
+</keyframe> -->

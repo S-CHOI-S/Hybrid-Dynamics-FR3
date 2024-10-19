@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/tinyobjloader-src/tiny_obj_loader.cc
+tiny_obj_loader.h
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/tinyobjloader-src/tiny_obj_loader.h
+
+/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/_deps/tinyobjloader-src/tiny_obj_loader.h
+map
+-
+string
+-
+vector
+-
+cassert
+-
+cctype
+-
+cmath
+-
+cstddef
+-
+cstdlib
+-
+cstring
+-
+limits
+-
+utility
+-
+fstream
+-
+sstream
+-
+

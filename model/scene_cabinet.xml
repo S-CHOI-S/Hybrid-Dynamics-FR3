@@ -1,0 +1,73 @@
+<mujoco model='Panda_Cabinet'>
+    <!-- ======= WORLD ======= -->
+    <option timestep = '0.001' impratio="20"/>
+<!-- 
+    <default>
+        <geom contype="0" conaffinity="0" density="0.1" friction="0 0 0" />
+    </default> -->
+
+    <worldbody>
+        <light directional='false' diffuse='.7 .7 .7' specular='0.03 0.03 0.03' pos='-1 -1.0 4.0' dir='1 1.0 -4'/>
+        <geom name='ground' size="1.5 1.5 0.25" pos="0 0 0" type="plane" contype="1" conaffinity="0"/>
+        <camera name="fixed" pos="0 0 1.5" quat="0 0 0 1" />
+        <!-- Cameras for the VIL paper -->
+        <!-- <camera name="vil_camera" pos="0 -1.2 2" quat="0.92388 0.382683 0 0" />
+        <camera name="view_1" pos="1.2 -1. 0.5" euler="1. 0.7 0.5" />
+        <camera name="view_2" pos="0 0.5 0.2" euler="-1.57 0 3.14" />
+        <camera name="view_3" pos="0 0.2 -0.2" euler="-2.35 0 3.14" />
+        <camera name="view_4" pos="0.8 -0.8 0.8" euler="0.785 0.785 0.785" />
+        <camera name="view_5" pos="0 -0.25 -0.4" euler="-3.2 0 3.14" /> -->
+
+        <body name="fr3" pos="0 0 0">
+            <include file="mjinclude_fr3.xml"/>
+        </body>
+        <!-- <body name="door" pos="0.5 0 0"> -->
+        <body name="cabinet" pos="-1.8 0.3 0" quat="0 0 0 1">
+        <!-- <body name="door" pos="0.4 -0.3 0"> -->
+            <include file="./mjinclude_cabinet.xml"/>
+        </body>
+
+    </worldbody>
+
+    <!-- <include file='scene_valve_assets.xml'/> -->
+    <include file='assets_fr3.xml'/>
+    <include file='./asset_cabinet.xml'/>
+
+    <!-- ======= CONTACT PAIRS ======= -->
+    <contact>
+        <!-- <pair geom1="finger_contact0" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact1" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact2" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact3" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact4" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact5" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact6" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact7" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact8" geom2="handle_marker1" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact9" geom2="handle_marker1" friction="70 0.5 0.5"/> -->
+
+        <!-- <pair geom1="finger_contact0" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact1" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact2" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact3" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact4" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact5" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact6" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact7" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact8" geom2="cabinet322_collision" friction="70 0.5 0.5"/>
+        <pair geom1="finger_contact9" geom2="cabinet322_collision" friction="70 0.5 0.5"/> -->
+
+        <!-- <pair geom1="finger_contact0" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact1" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact2" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact3" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact4" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact5" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact6" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact7" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact8" geom2="cabinet322" friction="50 0.5 0.5"/>
+        <pair geom1="finger_contact9" geom2="cabinet322" friction="50 0.5 0.5"/> -->
+        <!-- <pair finger_contact0="finger_contact0_from_fr3" cabinet322="cabinet322_from_cabinet" friction="0.5 0.5 0.5"/> -->
+    </contact>
+
+</mujoco>

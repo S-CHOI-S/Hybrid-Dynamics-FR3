@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG  -rdynamic CMakeFiles/user_eg3.dir/src/user_eg3/user_eg3_r.cpp.o  -o ../../bin/user_eg3  ../../lib/libqhullcpp.a ../../lib/libqhullstatic_r.a -lm 

@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG  -rdynamic CMakeFiles/user_egp.dir/src/user_eg/user_eg.c.o  -o ../../bin/user_egp  -Wl,-rpath,/home/kist-robot2/mujoco-2.3.1_source/mujoco-2.3.1/lib ../../lib/libqhull_p.so.8.1-alpha1 -lm 

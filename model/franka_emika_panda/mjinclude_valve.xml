@@ -1,0 +1,24 @@
+
+                                   <mujocoincldue>
+                                        <body name="base_v" pos="0 0 0">
+                                        <inertial diaginertia="0 0 0" mass="0" pos="0 0 0"/>
+                                        <body name="valve_base" pos="0 0 0">
+                                        <inertial pos="0 0 0" mass="2.7" diaginertia="0.1 0.1 0.1"/>
+                                        <geom name="valve_base" type="mesh" rgba="1 1 1 1" mesh="valve_base" class="visual"/>
+                                        <geom name="obj_contact7" type="mesh" mesh="valve_base0" class="collision"/>
+                                        <geom name="obj_contact8" type="mesh" mesh="valve_base1" class="collision"/>
+                                        <geom name="obj_contact9" type="mesh" mesh="valve_base2" class="collision"/>
+                                        <geom name="obj_contact10" type="mesh" mesh="valve_base3" class="collision"/>
+                                        <geom name="obj_contact11" type="mesh" mesh="valve_base4" class="collision"/>
+                                        <body name="valve_handle" pos="0 0 0">
+                                        <inertial pos="0 0 0" quat="0.365653 0.605347 -0.36522 0.605365" mass="0.1" diaginertia="0.0483771 0.0410001 0.0111013"/>
+                                        <joint name="valve_joint" pos="0 0 0" axis="0 0 1" range="-6 6" frictionloss="1" damping="0" limited="true" springref="0" stiffness="0"/>
+                                        <geom name="valve" type="mesh" rgba="1 1 0 1" mesh="valve" class="visual"/>
+                                        <geom name="valve_contact1" type="mesh" mesh="valve0" class="collision"/>
+                                        <geom name="obj_contact13" type="mesh" mesh="valve1" class="collision"/>
+                                        <geom name="valve_contact0" type="mesh" mesh="valve2" class="collision"/>
+                                        </body>
+                                        </body>
+                                        </body>
+                                    </mujocoincldue> 
+                                

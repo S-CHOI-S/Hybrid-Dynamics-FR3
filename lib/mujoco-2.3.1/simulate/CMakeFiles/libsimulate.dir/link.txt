@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/liblibsimulate.a  CMakeFiles/libsimulate.dir/glfw_dispatch.cc.o CMakeFiles/libsimulate.dir/simulate.cc.o CMakeFiles/libsimulate.dir/uitools.cc.o
+/usr/bin/ranlib ../lib/liblibsimulate.a

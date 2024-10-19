@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG  -fuse-ld=gold -Wl,--gc-sections CMakeFiles/basic.dir/basic.cc.o  -o ../bin/basic  -Wl,-rpath,"\$ORIGIN/../lib" ../lib/libmujoco.so.2.3.1 ../lib/libglfw3.a /usr/lib/x86_64-linux-gnu/librt.so -lm -ldl /usr/lib/x86_64-linux-gnu/libX11.so -pthread 

@@ -1,0 +1,136 @@
+<mujocoinclude>
+    <body name="object">
+        <body name="flatflat">
+            <geom size="0.3 0.9 0.06" pos="-2.7 0.2 0.06" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.008 0.4" pos="-2.7 1.092 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.008 0.4" pos="-2.7 -0.692 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.008 0.9 0.4" pos="-2.992 0.2 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3175 0.93 0.014" pos="-2.7 0.2 0.934" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.02 0.4" pos="-2.7 -0.3 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.02 0.4" pos="-2.7 -0.1 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.02 0.4" pos="-2.7 0.3 0.52" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.4 0.01" pos="-2.7 0.7 0.67" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.3 0.4 0.01" pos="-2.7 0.7 0.45" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+
+        <body name="base_cabinet_c1_door" pos="-2.392 -0.7 0.52">
+            <inertial pos="0.000211765 0.202024 0.00741176" quat="0.999906 -0.0136387 0.000532158 -0.00113028" mass="3.4" diaginertia="0.227133 0.182094 0.0453174" />
+            <!-- <joint name="base_cabinet_c1_door_joint" pos="0 0 0" axis="0 0 -1" limited="true" range="0 1.5708" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.198 0.398" pos="0 0.198 0" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet11" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet12" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet13" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle3" class="collision" />
+        </body>
+        <body name="base_cabinet_c1_r1_drawer_front_panel" pos="-2.408 -0.5 0.64">
+            <inertial pos="-0.1315 0 -0.011" quat="0 0.689473 0 0.724311" mass="10" diaginertia="0.398227 0.298248 0.104187" />
+            <!-- <joint name="base_cabinet_c1_r1_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" /> -->
+            <geom size="0.008 0.175 0.03" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.175 0.008" pos="-0.263 0 -0.022" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c1_r2_drawer_front_panel" pos="-2.408 -0.5 0.4">
+            <inertial pos="-0.206643 0 -0.0328571" quat="0 0.690417 0 0.723412" mass="14" diaginertia="0.79076 0.668541 0.234422" />
+            <!-- <joint name="base_cabinet_c1_r2_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" /> -->
+            <geom size="0.008 0.175 0.1" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.175 0.008" pos="-0.263 0 -0.092" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.1" pos="-0.263 0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.1" pos="-0.263 -0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.175 0.1" pos="-0.526 0 0" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c2_pull_out_front_panel" pos="-2.392 -0.2 0.52">
+            <inertial pos="-0.307508 0 0.00538329" quat="0.70225 -0.0827365 -0.0827365 0.70225" mass="19.75" diaginertia="1.62489 0.943298 0.781226" />
+            <!-- <joint name="base_cabinet_c2_pull_out_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.098 0.398" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0 0.348" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet21" pos="0.008 0 0.348" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet22" pos="0.008 0 0.348" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet23" pos="0.008 0 0.348" type="mesh" mesh="handle3" class="collision" />
+            <geom size="0.271 0.075 0.008" pos="-0.279 0 0.1805" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.0675" pos="-0.279 0.067 0.24" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.0675" pos="-0.279 -0.067 0.24" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.075 0.0675" pos="-0.542 0 0.24" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.075 0.008" pos="-0.279 0 -0.2395" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.1" pos="-0.279 0.067 -0.1475" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.1" pos="-0.279 -0.067 -0.1475" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.075 0.1" pos="-0.542 0 -0.1475" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c3_r1_drawer_front_panel" pos="-2.392 0.1 0.82">
+            <inertial pos="-0.308565 0 -0.0320813" quat="0 0.715298 0 0.69882" mass="9.84" diaginertia="0.504495 0.386995 0.157083" />
+            <!-- <joint name="base_cabinet_c3_r1_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.198 0.098" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet311" pos="0.008 0 0.048" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet312" pos="0.008 0 0.048" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet313" pos="0.008 0 0.048" type="mesh" mesh="handle3" class="collision" />
+            <geom size="0.271 0.175 0.008" pos="-0.279 0 -0.064" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 -0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.175 0.072" pos="-0.542 0 0" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c3_r2_drawer_front_panel" pos="-2.392 0.1 0.62">
+            <inertial pos="-0.308565 0 -0.0320813" quat="0 0.715298 0 0.69882" mass="9.84" diaginertia="0.504495 0.386995 0.157083" />
+            <joint name="base_cabinet_c3_r2_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" damping="100" frictionloss="0.05" />
+            <geom size="0.008 0.198 0.098" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom name="cabinet320_handle_viz" pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" class="visual"/>
+            <geom name="cabinet320_handle" pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" class="collision" friction="5 1.0 1.0" solref="0.01 1.0" solimp="0.9 0.95 0.001 0.5 2"/>
+            <!-- <geom name="cabinet320_valve" pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="valve" class="visual" friction="5 0.5 0.5"/> -->
+            <!-- <geom name="handle_marker1_visual" pos="0.038 0 0.048" quat="0.707107 0.707107 0 0.0" type="cylinder" size="0.01 0.06" class="visual" /> -->
+            <geom name="handle_marker1" pos="0.038 0 0.048" quat="0.707107 0.707107 0 0.0" type="cylinder" size="0.01 0.06" class="collision"  friction="5 1.0 1.0" solref="0.01 1.0" solimp="0.9 0.95 0.001 0.5 2"/>
+            <geom name="cabinet322" pos="0.038 0 0.048" quat="0.707107 0.707107 0 0.0" type="cylinder" size="0.01 0.06" rgba="0.3 0.3 0.3 1" class="collision" friction="5 1.0 1.0" solref="0.01 1.0" solimp="0.9 0.95 0.001 0.5 2"/>
+            <!-- <geom name="cabinet322_ccollision" pos="0.038 0 0.048" quat="0.707107 0.707107 0 0.0" type="cylinder" size="0.01 0.06" rgba="0.3 0.3 0.3 1" class="visual" /> -->
+
+            <geom name="cabinet321" pos="0.008 0 0.048" type="mesh" mesh="handle1" class="collision" />
+            <!-- <geom name="cabinet322" pos="0.004 0 0.048" type="mesh" mesh="handle2" class="collision" /> -->
+            <geom name="cabinet322_collision" pos="0.038 0 0.048" quat="0.707107 0.707107 0 0.0" type="cylinder" size="0.01 0.06" rgba="0.3 0.3 0.3 1" class="collision" friction="5 1.0 1.0" solref="0.01 1.0" solimp="0.9 0.95 0.001 0.5 2"/>
+            <geom name="cabinet323" pos="0.008 0 0.048" type="mesh" mesh="handle3" class="collision" />
+            <geom size="0.271 0.175 0.008" pos="-0.279 0 -0.064" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 -0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.175 0.072" pos="-0.542 0 0" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c3_r3_drawer_front_panel" pos="-2.392 0.1 0.42">
+            <inertial pos="-0.308565 0 -0.0320813" quat="0 0.715298 0 0.69882" mass="9.84" diaginertia="0.504495 0.386995 0.157083" />
+            <joint name="base_cabinet_c3_r3_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" damping="100" frictionloss="0.1" />
+            <geom size="0.008 0.198 0.098" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet331" pos="0.008 0 0.048" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet332" pos="0.008 0 0.048" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet333" pos="0.008 0 0.048" type="mesh" mesh="handle3" class="collision" />
+            <geom size="0.271 0.175 0.008" pos="-0.279 0 -0.064" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 -0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.175 0.072" pos="-0.542 0 0" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c3_r4_drawer_front_panel" pos="-2.392 0.1 0.22">
+            <inertial pos="-0.308565 0 -0.0320813" quat="0 0.715298 0 0.69882" mass="9.84" diaginertia="0.504495 0.386995 0.157083" />
+            <!-- <joint name="base_cabinet_c3_r4_drawer_front_panel_joint" pos="0 0 0" axis="1 0 0" type="slide" limited="true" range="0 0.542" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.198 0.098" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0 0.048" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet341" pos="0.008 0 0.048" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet342" pos="0.008 0 0.048" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet343" pos="0.008 0 0.048" type="mesh" mesh="handle3" class="collision" />
+            <geom size="0.271 0.175 0.008" pos="-0.279 0 -0.064" type="box" rgba="0.9 0.9 0.9 1" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.271 0.008 0.072" pos="-0.279 -0.167 0" type="box" rgba="0.9 0.9 0.9 0.9" />
+            <geom size="0.008 0.175 0.072" pos="-0.542 0 0" type="box" rgba="0.9 0.9 0.9 1" />
+        </body>
+        <body name="base_cabinet_c4_door" pos="-2.392 0.3 0.52">
+            <inertial pos="0.000211765 0.202024 0.00741176" quat="0.999906 -0.0136387 0.000532158 -0.00113028" mass="3.4" diaginertia="0.227133 0.182094 0.0453174" />
+            <!-- <joint name="base_cabinet_c4_door_joint" pos="0 0 0" axis="0 0 -1" limited="true" range="0 1.5708" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.198 0.398" pos="0 0.198 0" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet41" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet42" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet43" pos="0.008 0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle3" class="collision" />
+        </body>
+        <body name="base_cabinet_c5_door" pos="-2.392 1.1 0.52">
+            <inertial pos="0.000211765 -0.202024 0.00741176" quat="0.999906 0.0136387 0.000532158 0.00113028" mass="3.4" diaginertia="0.227133 0.182094 0.0453174" />
+            <!-- <joint name="base_cabinet_c5_door_joint" pos="0 0 0" axis="0 0 1" limited="true" range="0 1.5708" damping="100" frictionloss="0.1" /> -->
+            <geom size="0.008 0.198 0.398" pos="0 -0.198 0" type="box" rgba="0.89 0.81 0.69 1" />
+            <geom pos="0.008 -0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.3 0.3 0.3 1" mesh="handle" />
+            <geom name="cabinet51" pos="0.008 -0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle1" class="collision" />
+            <geom name="cabinet52" pos="0.008 -0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle2" class="collision" />
+            <geom name="cabinet53" pos="0.008 -0.35 0.28" quat="0.707107 0.707107 0 0" type="mesh" mesh="handle3" class="collision" />
+        </body>
+    </body>
+</mujocoinclude>

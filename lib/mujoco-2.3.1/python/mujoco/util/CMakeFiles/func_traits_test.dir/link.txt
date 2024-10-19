@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/func_traits_test.dir/func_traits_test.cc.o  -o ../../../bin/func_traits_test  ../../../lib/libgmock.a ../../../lib/libgtest_main.a ../../../lib/libgtest.a -pthread 
