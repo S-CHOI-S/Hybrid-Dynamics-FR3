@@ -30,6 +30,7 @@ import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 
 import matplotlib.image as img
+import random
 
 
 RED = "\033[31m"
@@ -42,6 +43,8 @@ RESET = "\033[0m"
 
 HEURISTIC = 0
 RL = 1
+
+MAX_TIMESTEPS = 1e6
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -64,6 +67,17 @@ def main(PATH, TRAIN, OFFLINE, RENDERING):
 
             state = env.reset()
 
+            for t in range(int(MAX_TIMESTEPS)):
+                action = [7.2965e-18, 17.0942, -0.788736, 7.66635, 0.316923, 2.61568, -0.0276822]
+
+                # action = [random.uniform(0, 5) for _ in range(7)]
+
+                # action = env.select_action(state)
+                state, reward, done, _ = env.step(action)
+
+                if done == True:
+                    env.reset()
+
             # print("after reset")
 
         # pretrained_model_dir1 = pretrained_model_dir + "/rotation/"
@@ -75,7 +89,7 @@ def main(PATH, TRAIN, OFFLINE, RENDERING):
         # actor1.train()
         # actor2.train()
         
-        force_gains = []
+        # force_gains = []
         
         # for t in range(int(max_timesteps)):
 

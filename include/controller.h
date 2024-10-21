@@ -32,7 +32,7 @@ public:
  
     tuple<std::vector<double>, double> write_pybind();
     double write_force_pybind();
-    void put_action_pybind(array<double, 2> action_rotation, double action_force);
+    void put_action_pybind(array<double, 7> torque);
     
     tuple<array<double,2>, double> get_actions_pybind();
     // tuple<array<double,2>, double> get_commands_pybind();
@@ -48,6 +48,8 @@ public:
     void randomize_env_pybind(std::array<std::array<double, 3>, 3> rotation_obj, std::string object_name, int scale, std::array<double, 66> pos, double init_theta, double goal_theta, int planning_mode, bool generate_dxyz);
     tuple<std::vector<double>, std::vector<double>> get_force_pybind();
     double control_mode_pybind();
+    double write_control_mode_pybind(double ctrl_mode);
+
     // tuple<vector<double>,vector<double>, vector<vector<double>>> get_ee_pybind();
     tuple<vector<double>, vector<double>, float, float, float, float> get_ee_pybind();
     vector<vector<double>> get_jacobian_pybind();
@@ -298,6 +300,8 @@ private:
     // for cabinet
     Matrix3d _rotation_cabinet;
     Vector3d _position_cabinet;
+
+    VectorXd action_torque;
 
 };
 

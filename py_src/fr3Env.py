@@ -47,6 +47,7 @@ TASK_CONTROL = 2
 HEURISTIC_CIRCULAR_CONTROL = 2
 RL_CIRCULAR_CONTROL = 3
 RL_CONTROL = 6
+TORQUE_CONTROL = 5
 
 
 ## Cabinet
@@ -60,6 +61,7 @@ class dynamics_env:
         self.data = mujoco.MjData(self.model)
         mujoco.mj_step(self.model, self.data)
         self.controller = controller.CController(self.k)
+        self.controller.write_control_mode(TORQUE_CONTROL)
         self.rendering = True
         self.train = False
         self.env_rand = False
@@ -114,6 +116,8 @@ class dynamics_env:
 
         self.controller.read(self.data.time, self.data.qpos, self.data.qvel, self.model.opt.timestep)
         self.controller.control_mujoco()
+        self.control_mode = self.controller.control_mode()
+        # print(self.control_mode)
 
         self.bound_done = False
         self.goal_done = False
@@ -145,6 +149,7 @@ class dynamics_env:
         
         while not done:
             done = self._done()
+            self.controller.write_control_mode(TORQUE_CONTROL)
             self.control_mode = self.controller.control_mode()
             self.controller.read(self.data.time, self.data.qpos, self.data.qvel, self.model.opt.timestep)
 
@@ -154,6 +159,7 @@ class dynamics_env:
                 break
             self.command_data.append(self.controller.get_commands())
 
+            self.controller.put_action(action)
             self.controller.control_mujoco()
             self._torque, _ = self.controller.write()
 
@@ -170,7 +176,7 @@ class dynamics_env:
                 self.render()
         obs = self._observation()
         done = self._done()
-        reward_rotation, reward_force = self._reward(action)
+        reward = self._reward(action)
         self.action_pre = action
 
         if self.rendering:
@@ -183,7 +189,7 @@ class dynamics_env:
         # print(f"{GREEN}f/step reward_force:     {RESET}", reward_force)
         
         
-        return obs, reward_rotation, reward_force, done, _
+        return obs, reward, done, _
 
     def _observation(self):
         '''
@@ -217,16 +223,16 @@ class dynamics_env:
         reward_qvel = -abs(self.data.qvel[:7]).sum() * 0.25
         q_max = max(abs(self.obs_q))
 
-        if q_max > 0.9:
-            if action < 0:
-                reward += 2
+        # if q_max > 0.9:
+        #     if action < 0:
+        #         reward += 2
 
-        elif self.bound_done:
+        if self.bound_done:
             reward -= 100
         elif self.time_done:
             reward += 10
 
-        reward_acc = -sum(abs(action - self.action_pre))
+        # reward_acc = -sum(abs(action - self.action_pre))
 
         return reward
     

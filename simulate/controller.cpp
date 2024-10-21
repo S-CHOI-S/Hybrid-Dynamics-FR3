@@ -94,16 +94,12 @@ tuple<std::vector<double>, double> CController::write_pybind()
 // 	return _force_gain;
 // }
 
-void CController::put_action_pybind(array<double, 2> action_rotation, double action_force)
+void CController::put_action_pybind(array<double, 7> torque)
 {
-	_ddroll = lpf(action_rotation[0], _ddroll, 0.1);
-	_ddpitch = lpf(action_rotation[1],_ddpitch, 0.1);
-	_droll = _droll + _ddroll * _dt;
-	_dpitch = _dpitch + _ddpitch * _dt;
-	_roll = _roll + _droll * _dt;
-	_pitch = _pitch + _dpitch * _dt;
-	// _dforce_gain = lpf(action_force * 0.1, _dforce_gain, 0.1); // -1 or 0 or 1
-	_dforce_gain = action_force;
+	for (int i=0; i<7; i++)
+	{
+		action_torque[i] = torque[i];
+	}
 }
 
 double CController::lpf(double input, double previousOutput, double alpha) {
@@ -165,6 +161,11 @@ tuple<std::vector<double>, std::vector<double>> CController::get_force_pybind()
 double CController::control_mode_pybind()
 {
 	return _control_mode;
+}
+
+double CController::write_control_mode_pybind(double ctrl_mode)
+{
+	_control_mode = ctrl_mode;
 }
 
 vector<vector<double>> CController::get_jacobian_pybind()
@@ -470,6 +471,18 @@ void CController::control_mujoco()
 
 		}
 	}
+	else if (_control_mode == 5) // torque control
+	{
+		if (_t - _init_t < 0.1)
+		{
+					
+			_start_time = _init_t;
+			_end_time = _start_time + _motion_time;
+		}
+
+		_torque = action_torque;
+	}
+
 	
 	_q_pre = _q;
 	_qdot_pre = _qdot;
@@ -1034,6 +1047,7 @@ void CController::JointControl()
 {
 	_torque.setZero();
 	_torque = Model._A * (400 * (_q_des - _q) + 40 * (_qdot_des - _qdot)) + Model._bg;
+	// cout << _torque << endl;
 }
 
 void CController::GripperControl()
@@ -1415,6 +1429,8 @@ void CController::Initialize()
 	_robot_base << 0, 0, 0;
 	_x_tmp.setZero(6);
 
+	action_torque.setZero(7);
+
 	load_model();
 }
 
@@ -1654,6 +1670,7 @@ PYBIND11_MODULE(controller, m)
 		.def("get_jacobian", &CController::get_jacobian_pybind)
 		.def("get_model", &CController::get_model_pybind)
 		.def("control_mode", &CController::control_mode_pybind)
+		.def("write_control_mode", &CController::write_control_mode_pybind)
 		.def("desired_rpy", &CController::desired_rpy_pybind)
 		.def("get_commands", &CController::get_commands_pybind)
 		// .def("target_replan", &CController::TargetRePlan_pybind)
