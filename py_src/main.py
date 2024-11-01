@@ -69,6 +69,7 @@ def main(PATH, TRAIN, OFFLINE, RENDERING):
 
             for t in range(int(MAX_TIMESTEPS)):
                 action = [7.2965e-18, 17.0942, -0.788736, 7.66635, 0.316923, 2.61568, -0.0276822]
+                env._command_EE()
 
                 # action = [random.uniform(0, 5) for _ in range(7)]
 

@@ -33,6 +33,7 @@ public:
     tuple<std::vector<double>, double> write_pybind();
     double write_force_pybind();
     void put_action_pybind(array<double, 7> torque);
+    array<double, 6> get_EE_pybind();
     
     tuple<array<double,2>, double> get_actions_pybind();
     // tuple<array<double,2>, double> get_commands_pybind();
@@ -70,6 +71,8 @@ public:
 	vector<double> rpy_des;
     float gripper_goal;
 	vector<vector<double>> J_hands, lambda, inertia;
+
+    array<double, 6> x_hand_;
 	
     
     void Initialize();

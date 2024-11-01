@@ -138,6 +138,17 @@ array<double, 6> CController::get_commands_pybind(){
 	return commands;
 }
 
+array<double, 6> CController::get_EE_pybind()
+{
+	// HERE
+	for (int i = 0; i < 6; i++)
+    {
+        x_hand_[i] = _x_hand(i);  // 값을 배열에 직접 할당
+    }
+
+    return x_hand_;
+}
+
 tuple<std::vector<double>, std::vector<double>> CController::get_force_pybind()
 {
 	torque_command.clear();
@@ -1667,6 +1678,7 @@ PYBIND11_MODULE(controller, m)
 		.def("relative_T_hand", &CController::relative_T_hand_pybind)
 		// .def("randomize_env", &CController::randomize_env_pybind)
 		.def("get_ee", &CController::get_ee_pybind)
+		.def("get_EE", &CController::get_EE_pybind)
 		.def("get_jacobian", &CController::get_jacobian_pybind)
 		.def("get_model", &CController::get_model_pybind)
 		.def("control_mode", &CController::control_mode_pybind)

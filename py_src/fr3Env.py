@@ -79,6 +79,7 @@ class dynamics_env:
         self.qdot_init = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.q_init = [0, np.deg2rad(-60), 0, np.deg2rad(-90), 0, np.deg2rad(90), np.deg2rad(45), 0, 0]
         self.q_reset = [0, np.deg2rad(-60), 0, np.deg2rad(-90), 0, np.deg2rad(90), np.deg2rad(45), 0.03, 0.03]
+        self.tau_init = [7.2965e-18, 17.0942, -0.788736, 7.66635, 0.316923, 2.61568, -0.0276822]
         self.episode_number = -1
         
         desired_contact_list = ["finger_contact0", "finger_contact1",
@@ -112,7 +113,7 @@ class dynamics_env:
         self.data.qpos = self.q_init
         self.data.qvel = self.qdot_init
 
-        self.episode_time = abs(5)
+        self.episode_time = abs(10)
 
         self.controller.read(self.data.time, self.data.qpos, self.data.qvel, self.model.opt.timestep)
         self.controller.control_mujoco()
@@ -250,6 +251,10 @@ class dynamics_env:
         # print(f"{GREEN}self.time_done: {RESET}", self.time_done)
         # print(f"{GREEN}self.bound_done: {RESET}", self.bound_done)
         # print(f"{GREEN}self.deviation_done: {RESET}", self.deviation_done)
+
+        # print(f"{YELLOW}self.time_done:    {RESET}{self.time_done}")
+        # print(f"{YELLOW}self.start_time:   {RESET}{self.start_time}")
+        # print(f"{YELLOW}self.episode_time: {RESET}{self.episode_time}")
         
         if self.time_done or self.bound_done:
             print(f"{RED}DONEDONEDONEDONE{RESET}")
@@ -261,6 +266,19 @@ class dynamics_env:
             return True
         else:
             return False
+        
+    def _command_EE(self):
+        current_EE = []
+        current_EE = self.controller.get_EE()
+        noise = np.random.uniform(-0.1, 0.1, size=3)
+        updated_values = [current_EE[:3] + noise, current_EE[:3] + noise]
+        
+        # # 업데이트된 값 출력
+        print("Updated Values:", updated_values)
+        
+        # # 현재 값을 업데이트된 값으로 변경
+        # current_values = updated_values
+        return updated_values
 
     def _construct_action_space(self):
         action_space = 7
