@@ -1,11 +1,5 @@
 import torch
 import fr3Env
-import numpy as np
-
-''' Only for Rendering '''
-import mujoco
-import mujoco.viewer
-
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -20,29 +14,9 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def main():
     env = fr3Env.sim_env()
     
+    env.reset()
     while True:
-        env.reset()
-    
-    # with mujoco.viewer.launch_passive(env.model, env.data) as viewer:
-    #     while viewer.is_running():
-    #         # step_start = time.time()
-            
-    #         viewer.sync()
-    
+        env.step()
 
 if __name__ == "__main__":
     main()
-
-''' Only for Rendering '''
-# env = fr3Env.cabinet_env()
-# env.env_rand = True
-
-# # observation = env.reset(RL)
-
-# with mujoco.viewer.launch_passive(env.model, env.data) as viewer:
-#     while viewer.is_running():
-#         # step_start = time.time()
-        
-#         viewer.sync()
-        
-        

@@ -33,7 +33,7 @@ void CController::read(double t, double* q, double* qdot)
 }
 
 // for pybind11
-void CController::read_pybind(double t, array<double, 7> q, array<double, 7> qdot, double timestep)
+void CController::read_pybind(double t, array<double, 9> q, array<double, 9> qdot, double timestep)
 {
 	_dt = timestep;
 	_t = t;
@@ -62,12 +62,20 @@ void CController::write(double* torque)
 }
 
 // for pybind11
-tuple<std::vector<double>, double> CController::write_pybind()
+std::vector<double> CController::write_pybind()
 {
+	pybind_torque.clear();
+
 	for (int i = 0; i < _k; i++)
 	{
-		pybind_torque[i] = _torque(i);
+		pybind_torque.push_back(_torque(i));
 	}
+	for (int i = 0; i < 1; i++)
+	{
+		pybind_torque.push_back(0); // gripper
+	}
+
+	return pybind_torque;
 }
 
 void CController::control_mujoco()
@@ -106,8 +114,6 @@ void CController::control_mujoco()
 			HandTrajectory.reset_initial(_start_time, _x_hand, _xdot_hand);
 			HandTrajectory.update_goal(_x_goal_hand, _xdot_goal_hand, _end_time);
 			_bool_ee_motion = true;
-			// cout<<"_t : "<<_t<<endl;
-			// cout<<"_x_hand 	: "<<_x_hand.transpose()<<endl;
 		}
 
 		HandTrajectory.update_time(_t);
@@ -134,8 +140,6 @@ void CController::control_mujoco()
 			HandTrajectory.reset_initial(_start_time, _x_hand, _xdot_hand);
 			HandTrajectory.update_goal(_x_goal_hand, _xdot_goal_hand, _end_time);
 			_bool_ee_motion = true;
-			// cout<<"_t : "<<_t<<endl;
-			// cout<<"_x_hand 	: "<<_x_hand.transpose()<<endl;
 		}
 
 		HandTrajectory.update_time(_t);
@@ -153,8 +157,6 @@ void CController::control_mujoco()
 			_bool_init = true;
 		}
 	}
-
-	cout << "robot_current_pose:\n" << _x_hand << endl;
 }
 
 void CController::ModelUpdate()
@@ -169,8 +171,6 @@ void CController::ModelUpdate()
 
 	_x_hand.head(3) = Model._x_hand;
 	_x_hand.tail(3) = CustomMath::GetBodyRotationAngle(Model._R_hand);
-	// cout << _x_hand.transpose() << endl;
-	// cout << "R hand " << Model._R_hand.transpose() << endl;
 	_xdot_hand = Model._xdot_hand;
 }	
 
@@ -287,8 +287,6 @@ void CController::reset_target(double motion_time, VectorXd target_pose)
 	_bool_joint_motion = false;
 	_bool_ee_motion = false;
 
-	// _q_goal = target_joint_position.head(7);
-	// _qdot_goal.setZero();
 	_x_goal_hand = target_pose;
 	_xdot_goal_hand.setZero();
 }
@@ -303,10 +301,6 @@ void CController::JointControl()
 	}
 	// Manipulator equations of motion in joint space
 	_torque = _A_diagonal*(400*(_q_des - _q) + 40*(_qdot_des - _qdot)) + Model._bg;
-	// cout<<"_q_des 	 : "<<_q_des.transpose()<<endl;
-	// cout<<"_q 		 : "<<_q.transpose()<<endl;
-	// cout<<"_qdot_des : "<<_qdot_des.transpose()<<endl;
-	// cout<<"_qdot	 : "<<_qdot.transpose()<<endl<<endl;
 }
 
 void CController::CLIK()
@@ -326,16 +320,8 @@ void CController::CLIK()
 	for(int i = 0; i < 7; i++){
 		_A_diagonal(i,i) += 1.0;
 	}
-	// _torque(0) = 400*(_q_des(0)-_q(0)) + 20*(_qdot_des(0)-_qdot(0));
-	// _torque(1) = 2500*(_q_des(1)-_q(1)) + 250*(_qdot_des(1)-_qdot(1));
-	// _torque(2) = 1500*(_q_des(2)-_q(2)) + 170*(_qdot_des(2)-_qdot(2));
-	// _torque(3) = 1700*(_q_des(3)-_q(3)) + 320*(_qdot_des(3)-_qdot(3));
-	// _torque(4) = 700*(_q_des(4)-_q(4)) + 70*(_qdot_des(4)-_qdot(4));
-	// _torque(5) = 500*(_q_des(5)-_q(5)) + 50*(_qdot_des(5)-_qdot(5));
-	// _torque(6) = 520*(_q_des(6)-_q(6)) + 15*(_qdot_des(6)-_qdot(6));
 
 	_torque = _A_diagonal * (400 * (_q_des - _q) + 40 * (_qdot_des - _qdot)) + Model._bg;
-	// cout<<"torque :"<<_torque.transpose()<<endl;
 }
 
 void CController::OperationalSpaceControl()
@@ -367,12 +353,6 @@ void CController::OperationalSpaceControl()
 	F_command_star = 400 * _x_err_hand + 40 * _x_dot_err_hand;
 
 	_torque = (_J_T_hands * _Lambda * F_command_star + Model._bg) + _J_null * Model._A * (_qdot_des-_qdot);
-
-	// cout << "_J_null\n" << _J_null * Model._A << endl;
-
-	// cout << "\ntarget pose:\n" << " x -> x - 0.1\n y -> y + 0.05\n z -> z + 0.05\n===============\n" << endl;
-	// cout << "Robot pose error:\n" << _x_des_hand.head(3) - Model._x_hand << "\n"
-	// << _x_des_hand.tail(3) - CustomMath::GetBodyRotationAngle(Model._R_hand) << "\n===============\n===============" << endl;
 }
 
 void CController::Initialize()
@@ -388,13 +368,7 @@ void CController::Initialize()
 	_kpj = 400.0;
 	_kdj = 20.0;
 
-	// _kpj_diagonal.setZero(_k, _k);
-	// //							0 		1	2		3	   4	5 	6
-	// _kpj_diagonal.diagonal() << 400., 2500., 1500., 1700., 700., 500., 520.;
-	// _kdj_diagonal.setZero(_k, _k);
-	// _kdj_diagonal.diagonal() << 20., 250., 170., 320., 70., 50., 15.;
-	_x_kp = 1;//작게 0.1
-	// _x_kp = 20.0;
+	_x_kp = 1;
 	_x_kd = 1;
 
     _q.setZero(_k);
@@ -408,21 +382,9 @@ void CController::Initialize()
 	_x_hand.setZero(6);
 	_xdot_hand.setZero(6);
 
-	//////////////////원본///////////////////
-	// _cnt_plan = 0;
 	_bool_plan.setZero(30);
-	// _time_plan.resize(30);
-	// _time_plan.setConstant(5.0);
-	//////////////////원본///////////////////
 
 	_q_home.setZero(_k);
-	// _q_home(0) = 0.0;
-	// _q_home(1) = -30.0 * DEG2RAD;
-	// _q_home(2) = 30.0 * DEG2RAD;
-	// _q_home(3) = -30.0 * DEG2RAD;
-	// _q_home(4) = 30.0 * DEG2RAD;
-	// _q_home(5) = -60.0 * DEG2RAD;
-	// _q_home(6) = 30.0 * DEG2RAD;
 	_q_home(0) = 0;
 	_q_home(1) = -M_PI_4;
 	_q_home(2) = 0;
@@ -463,32 +425,9 @@ void CController::Initialize()
 	_pre_q.setZero(7);
 	_pre_qdot.setZero(7);
 
-	///////////////////save_stack/////////////////////
 	_q_order.setZero(7);
 	_qdot_order.setZero(7);
-	// _max_joint_position.setZero(7);
-	// _min_joint_position.setZero(7);
 
-	// _min_joint_position(0) = -2.9671;
-	// _min_joint_position(1) = -1.8326;
-	// _min_joint_position(2) = -2.9671;
-	// _min_joint_position(3) = -3.1416;
-	// _min_joint_position(4) = -2.9671;
-	// _min_joint_position(5) = -0.0873;
-	// _min_joint_position(6) = -2.9671;
-
-	// _max_joint_position(0) = 2.9671;
-	// _max_joint_position(1) = 1.8326;
-	// _max_joint_position(2) = 2.9671;
-	// _max_joint_position(3) = 0.0;
-	// _max_joint_position(4) = 2.9671;
-	// _max_joint_position(5) = 3.8223;
-	// _max_joint_position(6) = 2.9671;
-
-	///////////////////estimate_lr/////////////////////
-
-	// cout << fixed;
-	// cout.precision(3);
 	_cnt_plan = 0;
 	_bool_plan(_cnt_plan) = 1;
 }
@@ -504,7 +443,6 @@ PYBIND11_MODULE(controller, m)
 		.def("read", &CController::read_pybind)
 		.def("control_mujoco", &CController::control_mujoco)
 		.def("write", &CController::write_pybind)
-		// .def("write_force", &CController::write_force_pybind)
 		.def("initialize", &CController::Initialize)
 		;
 

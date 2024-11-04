@@ -11,7 +11,8 @@
 #include "trajectory.h"
 #include "custommath.h"
 
-#include "pybind11/pybind11.h"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 using namespace std;
 using namespace Eigen;
@@ -34,9 +35,8 @@ public:
     void Initialize();
 
     // for pybind11
-    void read_pybind(double t, array<double, 7> q, array<double, 7> qdot, double timestep);
-    tuple<std::vector<double>, double> write_pybind();
-    double pybind_torque[7];
+    void read_pybind(double t, array<double, 9> q, array<double, 9> qdot, double timestep);
+    std::vector<double> write_pybind();
 
 private:
     
@@ -106,6 +106,9 @@ private:
     MatrixXd _J_null; // Null space control jacobian matrix
     MatrixXd _Lambda; // Inertia matirx: Operational Space
     VectorXd F_command_star; // command vector of the decoupled end-effector
+
+    // for pybind11
+    std::vector<double> pybind_torque;
 };
 
 #endif
