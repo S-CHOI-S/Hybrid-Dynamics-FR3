@@ -35,6 +35,7 @@ public:
     MatrixXd _J_tmp; 
 
     Vector3d _position_local_task_hand; // End-effector coordinate
+    Vector3d _tmp_position_local_task_hand;
     Vector3d _x_hand; // End-effector position
     Matrix3d _R_hand; // End-effector rotation matrix
 

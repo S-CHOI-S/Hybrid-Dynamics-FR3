@@ -26,7 +26,6 @@ public:
 	VectorXd position_cubicSpline();
 	VectorXd velocity_cubicSpline();
 
-
 private:
 	void Initialize();
 	void check_vector_size(VectorXd X);
@@ -34,6 +33,7 @@ private:
 	int _vector_size;
 	double _time_start, _time, _time_end;	
 	VectorXd _init_pos, _init_vel, _goal_pos, _goal_vel;
+
 	bool _bool_trajectory_complete;
 	double _motion_threshold;
 };
@@ -72,60 +72,11 @@ private:
 	Matrix3d rotation_0, rotation_f;
 	VectorXd _init_pos, _init_vel;
 	VectorXd _goal_pos, _goal_vel;
+
 	Vector3d w_0, a_0;
 
 	bool _bool_trajectory_complete;
 };
 
-
-class RTrajectory
-{
-
-public:
-	RTrajectory();
-	virtual ~RTrajectory();
-
-
-	void reset_initial(double time0, Vector3d tangent_vector, Vector3d normal_vector, Vector3d origin, double radius, MatrixXd Tvr, double dt);
-
-	double update_time(double time);
-	void update_theta(double theta);
-	
-	void update_goal(double goal_time, double init_theta, double goal_theta, Vector3d x_hand);
-	
-	Vector3d drpy2nextrpy(Vector3d drpy, Vector3d rpy);
-	VectorXd position_circular();
-	VectorXd velocity_circular();
-	Vector3d rotation_circular(double pi, double psi, Vector3d x_hand);
-	Vector3d rotationdot_circular();
-
-	int check_trajectory_complete();
-
-
-private:
-	void Initialize();
-
-	double angle_cubicSpline();
-	
-	double angledot_cubicSpline();
-	Vector3d rotation_circular_calc(double theta, double pi, double psi, Vector3d x_hand);
-	Matrix3d R3D(Vector3d unitVec, double angle);
-
-	int _vector_size;
-
-	double _time_start, _time, _time_end, _dt;
-	double _acc_theta, _acc_time, _acc_dtheta, _add_theta;
-	double _theta, _dtheta, _r, _goal_theta, _theta_des;
-	double _theta_next, _dtheta_next;
-	Vector3d _tangent_vector, _normal_vector;
-	MatrixXd _Tvr;
-	bool _bool_trajectory_complete;
-	double _init_theta;
-	VectorXd _rpy_next, _rpy;
-	Vector3d _origin;
-
-
-	
-};
 
 #endif

@@ -49,8 +49,40 @@ RL_CIRCULAR_CONTROL = 3
 RL_CONTROL = 6
 TORQUE_CONTROL = 5
 
+## env
+class sim_env:
+    def __init__(self):
+        self.k = 7
+        self.dof = 9
+        
+        self.model_path = "../model/fr3.xml"
+        self.model = mujoco.MjModel.from_xml_path(self.model_path)
+        self.data = mujoco.MjData(self.model)
+        mujoco.mj_step(self.model, self.data)
+        
+        self.controller = controller.CController()
+        
+        self.viewer = None
+        self.rendering = True
+        
+    def reset(self):
+        self.controller.initialize()
+        
+        if self.rendering:
+            self.render()
+    
+    def render(self):
+        if self.viewer is None:
+            self.viewer = viewer.launch_passive(model=self.model, data=self.data)
+            self.viewer.cam.lookat = self.data.body('link0').subtree_com
+            self.viewer.cam.elevation = -15
+            self.viewer.cam.azimuth = 130
+            # self.viewer.cam.distance = 3
+        else:
+            self.viewer.sync()
 
-## Cabinet
+
+## dynamics_env
 class dynamics_env:
 
     def __init__(self) -> None:

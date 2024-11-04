@@ -2,20 +2,23 @@
 #define CUSTOMMATH_H
 
 #define DEG2RAD (0.01745329251994329576923690768489)
-#define RAD2DEG 1 / DEG2RAD
+#define RAD2DEG 1/DEG2RAD
 #define GRAVITY 9.80665
 #define PI 3.1415926535897932384626433
 
 #include "math.h"
 #include <eigen3/Eigen/Dense>
-#include <eigen3/unsupported/Eigen/MatrixFunctions>
-using namespace Eigen;
+#include <eigen3/Eigen/Eigenvalues>
 #include <vector>
+#include <algorithm>
+
+using namespace Eigen;
+
 namespace CustomMath
 {
 
     // pseudo inverse
-    static MatrixXd pseudoInverseSVD(const MatrixXd &a, double epsilon = std::numeric_limits<double>::epsilon())
+    static MatrixXd pseudoInverseSVD(const MatrixXd& a, double epsilon = std::numeric_limits<double>::epsilon())
     {
         JacobiSVD<MatrixXd> svd(a, Eigen::ComputeThinU | Eigen::ComputeThinV);
         double tolerance = epsilon * std::max(a.cols(), a.rows()) * svd.singularValues().array().abs()(0);
@@ -26,17 +29,17 @@ namespace CustomMath
         return ainv;
     }
 
-    static MatrixXd pseudoInverseQR(const MatrixXd &A)
+    static MatrixXd pseudoInverseQR(const MatrixXd& A)
     {
         CompleteOrthogonalDecomposition<MatrixXd> cod(A);
         return cod.pseudoInverse();
     }
 
-    static MatrixXd OneSidedInverse(const MatrixXd &A) // no use
+    static MatrixXd OneSidedInverse(const MatrixXd& A) //no use
     {
         MatrixXd Ainv(A.cols(), A.rows());
 
-        if (A.cols() > A.rows()) // left inverse
+        if (A.cols() > A.rows()) //left inverse
         {
             MatrixXd AAT(A.rows(), A.rows());
             AAT = A * A.transpose();
@@ -45,7 +48,7 @@ namespace CustomMath
 
             Ainv = A.transpose() * AATinv;
         }
-        else // right inverse
+        else //right inverse
         {
             MatrixXd ATA(A.cols(), A.cols());
             ATA = A.transpose() * A;
@@ -57,7 +60,7 @@ namespace CustomMath
         return Ainv;
     }
 
-    static MatrixXd WeightedPseudoInverse(const MatrixXd &Q, const MatrixXd &W, const bool Is_W_fullrank)
+    static MatrixXd WeightedPseudoInverse(const MatrixXd& Q, const MatrixXd& W, const bool Is_W_fullrank)
     {
         MatrixXd invQ(Q.cols(), Q.rows());
         MatrixXd transposeQ(Q.cols(), Q.rows());
@@ -69,7 +72,7 @@ namespace CustomMath
         else
         {
             Winv = pseudoInverseQR(W);
-            // Winv = pseudoInverseSVD(W, 0.0001);
+            //Winv = pseudoInverseSVD(W, 0.0001);
         }
         transposeQ = Q.transpose();
         MatrixXd tmp1(W.cols(), Q.rows());
@@ -81,13 +84,13 @@ namespace CustomMath
         MatrixXd tmp3inv(Q.rows(), Q.rows());
         tmp3inv = tmp3.inverse();
         invQ.noalias() = tmp1 * tmp3inv;
-        // invQ = Winv*transposeQ*pseudoInverseQR(Q*Winv*transposeQ);
-        // invQ = Winv*transposeQ*pseudoInverseSVD(Q*Winv*transposeQ);
+        //invQ = Winv*transposeQ*pseudoInverseQR(Q*Winv*transposeQ);
+        //invQ = Winv*transposeQ*pseudoInverseSVD(Q*Winv*transposeQ);
 
         return invQ;
     }
 
-    static MatrixXd DampedWeightedPseudoInverse(const MatrixXd &Q, const MatrixXd &W, const bool Is_W_fullrank)
+    static MatrixXd DampedWeightedPseudoInverse(const MatrixXd& Q, const MatrixXd& W, const bool Is_W_fullrank, double sigma)
     {
         MatrixXd invQ(Q.cols(), Q.rows());
         MatrixXd transposeQ(Q.cols(), Q.rows());
@@ -99,13 +102,14 @@ namespace CustomMath
         else
         {
             Winv = pseudoInverseQR(W);
-            // Winv = pseudoInverseSVD(W, 0.0001);
+            //Winv = pseudoInverseSVD(W, 0.0001);
         }
         transposeQ = Q.transpose();
-        double sigma = 0.01;
+        // double sigma = 0.01;
+        sigma = 0.5;
         MatrixXd Id(Q.rows(), Q.rows());
         Id.setIdentity();
-        // invQ = Winv*transposeQ*pseudoInverseQR(Q*Winv*transposeQ + sigma*Id);
+        //invQ = Winv*transposeQ*pseudoInverseQR(Q*Winv*transposeQ + sigma*Id);
         MatrixXd tmp1(W.cols(), Q.rows());
         tmp1.noalias() = Winv * transposeQ;
         MatrixXd tmp2(Q.rows(), W.rows());
@@ -115,7 +119,7 @@ namespace CustomMath
         MatrixXd tmp4(Q.rows(), Q.rows());
         tmp4.noalias() = tmp3 + sigma * Id;
         MatrixXd tmp4inv(Q.rows(), Q.rows());
-        // tmp4inv = pseudoInverseSVD(tmp4, 0.0001);
+        //tmp4inv = pseudoInverseSVD(tmp4, 0.0001);
         tmp4inv = pseudoInverseQR(tmp4);
 
         invQ.noalias() = tmp1 * tmp4inv;
@@ -124,11 +128,11 @@ namespace CustomMath
     }
 
     // lowpass filter
-    static double VelLowpassFilter(double rT,      // delT
-                                   double rWn,     // cutoff freq (rad/sec)
-                                   double rQ_pre,  // previous position
-                                   double rQ,      // current position
-                                   double rVel_pre // previous filtered velocity
+    static double VelLowpassFilter(double rT, //delT
+        double rWn, //cutoff freq (rad/sec)
+        double rQ_pre, //previous position
+        double rQ, //current position
+        double rVel_pre //previous filtered velocity
     )
     {
         double rA;
@@ -145,10 +149,10 @@ namespace CustomMath
 
         rVel = ((-(rD)) * rVel_pre + (rA)*rQ + (rB)*rQ_pre) / (rC);
 
-        return (rVel);
+        return(rVel);
     }
 
-    static double LowPassFilter(double dT, double Wc, double X, double preY) // sampling time, cutoff freq, input, previous output
+    static double LowPassFilter(double dT, double Wc, double X, double preY) //sampling time, cutoff freq, input, previous output
     {
         double tau = 1.0 / Wc;
         double y = tau / (tau + dT) * preY + dT / (tau + dT) * X;
@@ -167,17 +171,17 @@ namespace CustomMath
 
         double threshold = 0.001;
         pitchangle = -asin(RotMat(2, 0));
-        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) // when RotMat(2,0) == 1
-        {                                                                     // Gimbal lock, pitch = -90deg
+        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) //when RotMat(2,0) == 1
+        {//Gimbal lock, pitch = -90deg
             rollangle = atan2(-RotMat(0, 1), -RotMat(0, 2));
             yawangle = 0.0;
         }
-        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) // when RotMat(2,0) == -1
-        {                                                                            // Gimbal lock, pitch = 90deg
+        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) //when RotMat(2,0) == -1
+        {//Gimbal lock, pitch = 90deg
             rollangle = atan2(RotMat(0, 1), RotMat(0, 2));
             yawangle = 0.0;
         }
-        else // general solution
+        else //general solution
         {
             rollangle = atan2(RotMat(2, 1), RotMat(2, 2));
             yawangle = atan2(RotMat(1, 0), RotMat(0, 0));
@@ -203,15 +207,15 @@ namespace CustomMath
         double rollangle, pitchangle;
         double threshold = 0.001;
         pitchangle = -asin(RotMat(2, 0));
-        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) // when RotMat(2,0) == 1
-        {                                                                     // Gimbal lock, pitch = -90deg
+        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) //when RotMat(2,0) == 1
+        {//Gimbal lock, pitch = -90deg
             rollangle = atan2(-RotMat(0, 1), -RotMat(0, 2));
         }
-        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) // when RotMat(2,0) == -1
-        {                                                                            // Gimbal lock, pitch = 90deg
+        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) //when RotMat(2,0) == -1
+        {//Gimbal lock, pitch = 90deg
             rollangle = atan2(RotMat(0, 1), RotMat(0, 2));
         }
-        else // general solution
+        else //general solution
         {
             rollangle = atan2(RotMat(2, 1), RotMat(2, 2));
         }
@@ -225,15 +229,15 @@ namespace CustomMath
 
         double threshold = 0.001;
         pitchangle = -asin(RotMat(2, 0));
-        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) // when RotMat(2,0) == 1
-        {                                                                     // Gimbal lock, pitch = -90deg
+        if (RotMat(2, 0) > 1.0 - threshold && RotMat(2, 0) < 1.0 + threshold) //when RotMat(2,0) == 1
+        {//Gimbal lock, pitch = -90deg
             yawangle = 0.0;
         }
-        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) // when RotMat(2,0) == -1
-        {                                                                            // Gimbal lock, pitch = 90deg
+        else if (RotMat(2, 0) < -1.0 + threshold && RotMat(2, 0) > -1.0 - threshold) //when RotMat(2,0) == -1
+        {//Gimbal lock, pitch = 90deg
             yawangle = 0.0;
         }
-        else // general solution
+        else //general solution
         {
             yawangle = atan2(RotMat(1, 0), RotMat(0, 0));
         }
@@ -245,7 +249,7 @@ namespace CustomMath
     {
         Eigen::Matrix3d R_yaw;
         R_yaw.setZero();
-        // yawŽÂ zÃà¿¡ ŽëÇÑ ÈžÀü
+        //yawŽÂ zÃà¿¡ ŽëÇÑ ÈžÀü
         R_yaw(2, 2) = 1.0;
         R_yaw(0, 0) = cos(Yaw);
         R_yaw(0, 1) = -sin(Yaw);
@@ -254,7 +258,7 @@ namespace CustomMath
 
         Eigen::Matrix3d R_pitch;
         R_pitch.setZero();
-        // pitchŽÂ yÃà¿¡ ŽëÇÑ ÈžÀü
+        //pitchŽÂ yÃà¿¡ ŽëÇÑ ÈžÀü
         R_pitch(1, 1) = 1.0;
         R_pitch(0, 0) = cos(Pitch);
         R_pitch(2, 2) = cos(Pitch);
@@ -263,7 +267,7 @@ namespace CustomMath
 
         Eigen::Matrix3d R_roll;
         R_roll.setZero();
-        // rollÀº xÃà¿¡ ŽëÇÑ ÈžÀü
+        //rollÀº xÃà¿¡ ŽëÇÑ ÈžÀü
         R_roll(0, 0) = 1.0;
         R_roll(1, 1) = cos(Roll);
         R_roll(2, 2) = cos(Roll);
@@ -272,10 +276,10 @@ namespace CustomMath
 
         Eigen::Matrix3d RGyro;
         RGyro.noalias() = R_yaw * R_pitch * R_roll;
-        // dMatrix RGyro_inv(3,3);
-        // RGyro.inv(RGyro_inv);
+        //dMatrix RGyro_inv(3,3);
+        //RGyro.inv(RGyro_inv);
 
-        // return RGyro_inv;
+        //return RGyro_inv;
         return RGyro;
     }
 
@@ -354,7 +358,6 @@ namespace CustomMath
     {
         Eigen::Vector3d phi;
         Eigen::Vector3d s[3], v[3], w[3];
-
         for (int i = 0; i < 3; i++)
         {
             v[i] = current_rotation.block<3, 1>(0, i);
@@ -363,13 +366,12 @@ namespace CustomMath
         }
         phi = s[0] + s[1] + s[2];
         phi = -0.5 * phi;
-
         return phi;
     }
     */
-    static Eigen::Vector3d getPhi(Eigen::Matrix3d &RotationMtx, Eigen::Matrix3d &DesiredRotationMtx) // Orientation 구성
+    static Eigen::Vector3d getPhi(Eigen::Matrix3d& RotationMtx, Eigen::Matrix3d& DesiredRotationMtx) //Orientation 구성
     {
-        // Get SkewSymmetric
+        //Get SkewSymmetric
         Eigen::Matrix3d s1_skew;
         Eigen::Matrix3d s2_skew;
         Eigen::Matrix3d s3_skew;
@@ -407,13 +409,13 @@ namespace CustomMath
         s2f = s2_skew * s2d;
         s3f = s3_skew * s3d;
         /////////////////////////////////////////////////////////////
-        // phi.resize(3);
+        //phi.resize(3);
         Eigen::Vector3d phi;
         phi = (s1f + s2f + s3f) * (-1.0 / 2.0);
         return phi;
     }
 
-    static Eigen::Vector3d OrientationVelocity(Eigen::Matrix3d Rot, Eigen::Matrix3d Rotdot) // rotation matrix, derivative of rotation matrix
+    static Eigen::Vector3d OrientationVelocity(Eigen::Matrix3d Rot, Eigen::Matrix3d Rotdot) //rotation matrix, derivative of rotation matrix
     {
         Eigen::Matrix3d RdotRT;
         RdotRT = Rotdot * Rot.transpose();
@@ -424,6 +426,7 @@ namespace CustomMath
 
         return OriVel;
     }
+
 
     static double Cubic(double rT, double rT_0, double rT_f, double rx_0, double rx_dot_0, double rx_f, double rx_dot_f)
     {
@@ -437,10 +440,11 @@ namespace CustomMath
         {
             rx_q = rx_f;
         }
-        else
-        {
+        else {
 
-            rx_q = rx_0 + rx_dot_0 * (rT - rT_0) + (3.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0)) - 2.0 * rx_dot_0 / (rT_f - rT_0) - rx_dot_f / (rT_f - rT_0)) * (rT - rT_0) * (rT - rT_0) + (-2.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0) * (rT_f - rT_0)) + (rx_dot_0 + rx_dot_f) / ((rT_f - rT_0) * (rT_f - rT_0))) * (rT - rT_0) * (rT - rT_0) * (rT - rT_0);
+            rx_q = rx_0 + rx_dot_0 * (rT - rT_0)
+                + (3.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0)) - 2.0 * rx_dot_0 / (rT_f - rT_0) - rx_dot_f / (rT_f - rT_0)) * (rT - rT_0) * (rT - rT_0)
+                + (-2.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0) * (rT_f - rT_0)) + (rx_dot_0 + rx_dot_f) / ((rT_f - rT_0) * (rT_f - rT_0))) * (rT - rT_0) * (rT - rT_0) * (rT - rT_0);
         }
         return (rx_q);
     }
@@ -457,9 +461,9 @@ namespace CustomMath
         {
             rx_q_dot = rx_dot_f;
         }
-        else
-        {
-            rx_q_dot = rx_dot_0 + 2.0 * (3.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0)) - 2.0 * rx_dot_0 / (rT_f - rT_0) - rx_dot_f / (rT_f - rT_0)) * (rT - rT_0) + 3.0 * (-2.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0) * (rT_f - rT_0)) + (rx_dot_0 + rx_dot_f) / ((rT_f - rT_0) * (rT_f - rT_0))) * (rT - rT_0) * (rT - rT_0);
+        else {
+            rx_q_dot = rx_dot_0 + 2.0 * (3.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0)) - 2.0 * rx_dot_0 / (rT_f - rT_0) - rx_dot_f / (rT_f - rT_0)) * (rT - rT_0)
+                + 3.0 * (-2.0 * (rx_f - rx_0) / ((rT_f - rT_0) * (rT_f - rT_0) * (rT_f - rT_0)) + (rx_dot_0 + rx_dot_f) / ((rT_f - rT_0) * (rT_f - rT_0))) * (rT - rT_0) * (rT - rT_0);
         }
         return (rx_q_dot);
     }
@@ -503,46 +507,46 @@ namespace CustomMath
         return alpha;
     }
 
-    static void ContactWrenchConeConstraintGenerate(double friction_coeff, double cop_x_b, double cop_y_b, double pushing_force_threshold, Eigen::MatrixXd &A, Eigen::VectorXd &lb, Eigen::VectorXd &ub) // A: constraint matrix
+    static void ContactWrenchConeConstraintGenerate(double friction_coeff, double cop_x_b, double cop_y_b, double pushing_force_threshold, Eigen::MatrixXd& A, Eigen::VectorXd& lb, Eigen::VectorXd& ub) //A: constraint matrix
     {
-        // This function is for contact wrench cone constraint
-        // based on Caron, Stéphane, Quang-Cuong Pham, and Yoshihiko Nakamura. "Stability of surface contacts for humanoid robots: Closed-form formulae of the contact wrench cone for rectangular support areas." 2015 IEEE International Conference on Robotics and Automation (ICRA). IEEE, 2015.
-        //  * z direction denotes normal direction of contact plane (negative direction = toward object or ground)
-        //  * pushing_force_thrreshold should be negative number
-        //  * coordinate has to locate center of the contact plane (cop_x_b = l_x/2, cop_y_b = l_y/2)
-        //  * friction_coeff, cop_x_b and cop_y_b should be positive number
-
+        //This function is for contact wrench cone constraint
+        //based on Caron, Stéphane, Quang-Cuong Pham, and Yoshihiko Nakamura. "Stability of surface contacts for humanoid robots: Closed-form formulae of the contact wrench cone for rectangular support areas." 2015 IEEE International Conference on Robotics and Automation (ICRA). IEEE, 2015.
+        // * z direction denotes normal direction of contact plane (negative direction = toward object or ground)
+        // * pushing_force_thrreshold should be negative number 
+        // * coordinate has to locate center of the contact plane (cop_x_b = l_x/2, cop_y_b = l_y/2)
+        // * friction_coeff, cop_x_b and cop_y_b should be positive number
+        
         A.setZero(17, 6);
         lb.setZero(17);
         ub.setZero(17);
 
-        double inf_val = 100000000.0; // large number to describe infinite
+        double inf_val = 100000000.0; //large number to describe infinite
 
         // A matrix
-        // CoP x
+        //CoP x
         A(0, 2) = -cop_x_b;
         A(0, 4) = -1.0;
         A(1, 2) = cop_x_b;
         A(1, 4) = -1.0;
-        // CoP y
+        //CoP y
         A(2, 2) = -cop_y_b;
         A(2, 3) = 1.0;
         A(3, 2) = cop_y_b;
         A(3, 3) = 1.0;
-        // Fx friction
+        //Fx friction
         A(4, 0) = 1.0;
         A(4, 2) = -friction_coeff;
         A(5, 0) = 1.0;
         A(5, 2) = friction_coeff;
-        // Fy friction
+        //Fy friction
         A(6, 1) = 1.0;
         A(6, 2) = -friction_coeff;
         A(7, 1) = 1.0;
         A(7, 2) = friction_coeff;
-        // Mz friction
+        //Mz friction
         A(8, 0) = -cop_y_b;
         A(8, 1) = -cop_x_b;
-        A(8, 2) = -friction_coeff * (cop_x_b + cop_y_b) / 2.0;
+        A(8, 2) = -friction_coeff*(cop_x_b+cop_y_b)/2.0;
         A(8, 3) = friction_coeff;
         A(8, 4) = friction_coeff;
         A(8, 5) = 1.0;
@@ -588,17 +592,17 @@ namespace CustomMath
         A(15, 3) = friction_coeff;
         A(15, 4) = friction_coeff;
         A(15, 5) = -1.0;
-        // Fz (pushing force)
+        //Fz (pushing force)
         A(16, 2) = 1.0;
-
-        // lb vector
+        
+        // lb vector        
         lb(1) = -inf_val;
         lb(3) = -inf_val;
         lb(5) = -inf_val;
         lb(7) = -inf_val;
         lb(16) = -inf_val;
-
-        // ub vector
+        
+        //ub vector
         ub(0) = inf_val;
         ub(2) = inf_val;
         ub(4) = inf_val;
@@ -613,69 +617,74 @@ namespace CustomMath
         ub(15) = inf_val;
         ub(16) = pushing_force_threshold;
     }
-    static void PrintEigenVector(VectorXd matrix)
+    
+    static double norm2_vector3(Eigen::Vector3d vector)
     {
-        int size = matrix.size();
-        for (int i = 0; i < size; ++i)
+        double _norm2 = 0.0;
+        for(int i = 0; i<3; i++)
         {
-            std::cout << matrix(i) << " ";
+            _norm2 = _norm2 + (vector(i) * vector(i));
         }
-        std::cout << std::endl;
+        _norm2 = sqrt(_norm2);
+        return _norm2;
     }
-    static void PrintEigenMatrix(MatrixXd matrix)
-    {
-        int rows = matrix.rows();
-        int cols = matrix.cols();
 
-        for (int i = 0; i < rows; ++i)
+    static double norm2_matrix33(Eigen::Matrix3d Matrix)
+    {
+        double _norm22 = 0.0;
+        Eigen::Matrix3d Matrix2;
+        Matrix2.setZero(3,3);
+        Matrix2 = Matrix.transpose() * Matrix;
+        EigenSolver<Matrix3d> es(Matrix2);
+        EigenSolver<Matrix3d>::EigenvalueType eigenValues = es.eigenvalues();
+        EigenSolver<Matrix3d>::EigenvectorsType eigenVectors = es.eigenvectors();
+
+        MatrixXcd sigma;
         {
-            for (int j = 0; j < cols; ++j)
+            sigma = MatrixXcd::Zero(eigenValues.rows(), eigenValues.rows());
+            for (int i = 0; i < eigenValues.rows(); ++i)
             {
-                std::cout << matrix(i, j) << " ";
+                if(eigenValues[i].real()<0.0000001)
+                {
+                    sigma(i, i) = 0.0;
+                }
+                else
+                {
+                    sigma(i, i) = sqrt(eigenValues[i].real());
+                }
+                
             }
-            std::cout << std::endl;
         }
-    }
 
-    static Vector3d drpy2nextrpy(Vector3d drpy, Vector3d rpy, double dt)
-    {
-        Matrix3d r_skew;
-        // r_skew << 0,     -drpy(2),  drpy(1),
-        // 		 drpy(2), 0,       -drpy(0),
-        // 		-drpy(1), drpy(0),	 0;
-        r_skew << 0, -drpy[2] * dt, drpy[1] * dt,
-            drpy[2] * dt, 0, -drpy[0] * dt,
-            -drpy[1] * dt, drpy[0] * dt, 0;
-        // r_skew << 0,     -drpy[2],  drpy[1],
-        // 		 drpy[2], 0,       -drpy[0],
-        // 		-drpy[1], drpy[0],	 0;
-        Matrix3d rdiff = r_skew.exp();
-        Matrix3d r0 = GetBodyRotationMatrix(rpy(0), rpy(1), rpy(2));
-        Matrix3d r1 = rdiff * r0.transpose().inverse();
-
-        Vector3d rpy_next = GetBodyRotationAngle(r1);
-        return rpy_next;
-    }
-
-    static double signedAngleBetweenVectors(const Eigen::Vector3d &a, const Eigen::Vector3d &b)
-    {
-        double cosTheta = a.dot(b) / (a.norm() * b.norm());
-        if (cosTheta >= 1){
-            return 0;
-        }
-        double thetaRad = std::acos(cosTheta);
-
-        // Calculate the sign of the angle using the cross product
-        Eigen::Vector3d crossProduct = a.cross(b);
-        if (crossProduct.z() < 0)
+        if(sigma(0,0).real() >= sigma(1,1).real())
         {
-            thetaRad = -thetaRad;
+            if(sigma(0,0).real() >= sigma(2,2).real())
+            {
+                _norm22 = sigma(0,0).real();
+            }
+            else
+            {
+                _norm22 = sigma(2,2).real();
+            }
         }
-        
-        
-        return thetaRad;
+        else
+        {
+            if(sigma(1,1).real() >= sigma(2,2).real())
+            {
+                _norm22 = sigma(1,1).real();
+            }
+            else
+            {
+                _norm22 = sigma(2,2).real();
+            }
+        }
+        return _norm22;
     }
-
 }
+
+
+
+
+
 
 #endif

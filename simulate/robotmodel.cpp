@@ -1,5 +1,4 @@
 #include "robotmodel.h"
-#include <filesystem>
 #define JDOF 7
 
 CModel::CModel()
@@ -41,7 +40,9 @@ void CModel::Initialize()
     _J_tmp.setZero(6,_k);
 
     _position_local_task_hand.setZero(); // 3x1
-	_position_local_task_hand(2) = +0.211; // from initial position. Z : 1.034 - 0.823
+	_tmp_position_local_task_hand.setZero(); // 3x1
+	// _tmp_position_local_task_hand(0) = 0.088;
+
     _x_hand.setZero(); // 3x1
     _R_hand.setZero(); // 3x3
 
@@ -54,30 +55,29 @@ void CModel::Initialize()
 
 void CModel::load_model()
 {   
-    filesystem::path relative_path("../model/fr3.urdf");
-    filesystem::path absolute_path = filesystem::absolute(relative_path);
+	RigidBodyDynamics::Addons::URDFReadFromFile("../model/fr3.urdf", &_model, false, false);
 
-    RigidBodyDynamics::Addons::URDFReadFromFile(absolute_path.string().c_str(), &_model, false, true);
-	
-	cout << endl << endl << "Model Loaded for RBDL." << endl << "Total DoFs: " << _model.dof_count << endl << endl;
-	
+    cout << endl << endl << "Model Loaded for RBDL." << endl << "Total DoFs: " << _model.dof_count << endl << endl;
 	if (_model.dof_count != _k)
 	{
 		cout << "Simulation model and RBDL model mismatch!!!" << endl << endl;
-		
 	}
 
     _bool_model_update = true; //check model update
 
 	cout << "Model Loading Complete." << endl << endl;
 
+	// for (unsigned int i = 0; i < _model.mBodies.size(); ++i) {
+	// 	cout << "Link " << i << " X_lambda:" << endl;
+	// 	cout << _model.X_lambda[i] << endl;
+	// }
 }
 
 void CModel::update_kinematics(VectorXd & q, VectorXd & qdot)
 {
 	_q = q;
 	_qdot = qdot;
-	
+
 	if (_bool_model_update == true)
 	{
 		RigidBodyDynamics::UpdateKinematicsCustom(_model, &_q, &_qdot, NULL); // update kinematics
@@ -94,19 +94,10 @@ void CModel::update_dynamics()
 	if (_bool_kinematics_update == true)
 	{	
 		RigidBodyDynamics::CompositeRigidBodyAlgorithm(_model, _q, _A, false); // update inertia matrix
-			
 		RigidBodyDynamics::InverseDynamics(_model, _q, _zero_vec_joint, _zero_vec_joint, _g, NULL); // get _g
 		RigidBodyDynamics::InverseDynamics(_model, _q, _qdot, _zero_vec_joint, _bg, NULL); // get _g+_b
-		// vector<double> armateur = {0., 0., 0., 0.3, 0.3, 0.3, 0.2, 0.12};
-		vector<double> armateur = {0.5, 0.5, 0.3, 0.3, 0.3, 0.3, 0.2, 0.12};
-		
-		for (int i = 0; i < 7; i++)
-		{
-			// _A(i, i) += armateur[i];
-			_A(i,i) += 0.1;
-		}
-		
 		_b = _bg - _g; //get _b
+
 		
 	}
 	else
@@ -123,7 +114,7 @@ void CModel::calculate_EE_Jacobians()
 		_J_hand.setZero();
 		_J_tmp.setZero();	
 
-		RigidBodyDynamics::CalcPointJacobian6D(_model, _q, _id_hand, _position_local_task_hand, _J_tmp, false); // update kinematc : false
+		RigidBodyDynamics::CalcPointJacobian6D(_model, _q, _id_hand, _tmp_position_local_task_hand, _J_tmp, false); // update kinematc : false
 		_J_hand.block<3, 7>(0, 0) = _J_tmp.block<3, 7>(3, 0); // linear : last three entries -> first three entries
 		_J_hand.block<3, 7>(3, 0) = _J_tmp.block<3, 7>(0, 0); // angular : first three entries -> last three entries
 
@@ -140,23 +131,11 @@ void CModel::calculate_EE_positions_orientations()
 {
     if (_bool_kinematics_update == true)
 	{
-		
 		_x_hand.setZero();
 		_R_hand.setZero();
 
 		_x_hand = RigidBodyDynamics::CalcBodyToBaseCoordinates(_model, _q, _id_hand, _position_local_task_hand, false);
 		_R_hand = RigidBodyDynamics::CalcBodyWorldOrientation(_model, _q, _id_hand, false).transpose();
-		
-	// Matrix3d EE_align1, EE_align2, EE_align3, EE_align4 ;
-	// EE_align1<< cos(-M_PI_4), sin(-M_PI_4),0,-sin(-M_PI_4),cos(-M_PI_4),0, 0,0,1;
-	// EE_align2<< cos(-M_PI_4), -sin(-M_PI_4),0,sin(-M_PI_4),cos(-M_PI_4),0, 0,0,1;
-	// EE_align3<< cos(M_PI_4), sin(M_PI_4),0,-sin(M_PI_4),cos(M_PI_4),0, 0,0,1;
-	// EE_align4<< cos(M_PI_4), -sin(M_PI_4),0,sin(M_PI_4),cos(M_PI_4),0, 0,0,1;
-	// 	// CustomMath::GetBodyRotationAngle(Model._R_hand)
-	// cout<<"current hand1 : "<<CustomMath::GetBodyRotationAngle(EE_align1*_R_hand).transpose()<<endl;
-	// cout<<"current hand2 : "<<CustomMath::GetBodyRotationAngle(EE_align2*_R_hand).transpose()<<endl;
-	// cout<<"current hand3 : "<<CustomMath::GetBodyRotationAngle(EE_align3*_R_hand).transpose()<<endl;	
-	// cout<<"current hand4 : "<<CustomMath::GetBodyRotationAngle(EE_align4*_R_hand).transpose()<<endl;
 
 	}
 	else
@@ -169,9 +148,6 @@ void CModel::calculate_EE_velocity()
 {
 	if (_bool_Jacobian_update == true)
 	{
-		// cout<<_J_hand<<endl;
-		// cout<<_qdot<<endl;
-	
 		_xdot_hand = _J_hand * _qdot;
 	}
 	else
@@ -181,28 +157,30 @@ void CModel::calculate_EE_velocity()
 }
 
 void CModel::set_robot_config(){
-	_max_joint_position(0) = 2.7437;
-	_min_joint_position(0) = -2.7437;
-	_max_joint_position(1) = 1.7837;
-	_min_joint_position(1) = -1.7837;
-	_max_joint_position(2) = 2.9007;
-	_min_joint_position(2) = -2.9007;
-	_max_joint_position(3) = -0.1518;
-	_min_joint_position(3) = -3.0421;
-	_max_joint_position(4) = 2.8065;
-	_min_joint_position(4) = -2.8065;
-	_max_joint_position(5) = 4.5169;
-	_min_joint_position(5) = 0.5445;
-	_max_joint_position(6) = 3.0159;
-	_min_joint_position(6) = -3.0159;
+	
+	_min_joint_position(0) = -2.8973;
+	_min_joint_position(1) = -1.7628;
+	_min_joint_position(2) = -2.8973;
+	_min_joint_position(3) = -3.0718;
+	_min_joint_position(4) = -2.8973;
+	_min_joint_position(5) = -0.0175;
+	_min_joint_position(6) = -2.8973;
 
-	_max_joint_velocity(0) = 2.62;
-	_max_joint_velocity(1) = 2.62;
-	_max_joint_velocity(2) = 2.62;
-	_max_joint_velocity(3) = 2.62;
-	_max_joint_velocity(4) = 5.26;
-	_max_joint_velocity(5) = 4.18;
-	_max_joint_velocity(6) = 5.26;
+	_max_joint_position(0) = 2.8973;
+	_max_joint_position(1) = 1.7628;
+	_max_joint_position(2) = 2.8973;
+	_max_joint_position(3) = -0.0698;
+	_max_joint_position(4) = 2.8973;
+	_max_joint_position(5) = 3.7525;
+	_max_joint_position(6) = 2.8973;
+
+	_max_joint_velocity(0) = 2.175;
+	_max_joint_velocity(1) = 2.175;
+	_max_joint_velocity(2) = 2.175;
+	_max_joint_velocity(3) = 2.175;
+	_max_joint_velocity(4) = 2.61;
+	_max_joint_velocity(5) = 2.61;
+	_max_joint_velocity(6) = 2.61;
 	_min_joint_velocity = -_max_joint_velocity;
 
 }
