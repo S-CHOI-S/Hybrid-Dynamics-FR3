@@ -37,6 +37,12 @@ public:
     // for pybind11
     void read_pybind(double t, array<double, 9> q, array<double, 9> qdot, double timestep);
     std::vector<double> write_pybind();
+    std::array<double, 6> get_EE_pybind();
+    int count_plan_pybind();
+    std::array<double, 9> get_joint_position_pybind();
+    void write_random_sampled_EE_pybind(std::array<double, 6> sampled_EE);
+    Eigen::Vector<double, 6> random_sampled_EE;
+    void write_qpos_init_pybind(std::array<double, 9> _q_init);
 
 private:
     
@@ -109,6 +115,7 @@ private:
 
     // for pybind11
     std::vector<double> pybind_torque;
+    Eigen::Vector<double, 6> get_random_sampled_EE();
 };
 
 #endif

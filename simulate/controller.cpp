@@ -11,6 +11,83 @@ CController::~CController()
 	
 }
 
+void CController::Initialize()
+{
+    _control_mode = 1; //1: joint space, 2: task space(CLIK), 3: operational space
+
+	_bool_init = true;
+	_t = 0.0;
+	_init_t = 0.0;
+	_pre_t = 0.0;
+	_dt = 0.0;
+
+	_kpj = 400.0;
+	_kdj = 20.0;
+
+	_x_kp = 1;
+	_x_kd = 1;
+
+    _q.setZero(_k);
+	_qdot.setZero(_k);
+	_torque.setZero(_k);
+
+	_J_hands.setZero(6,_k);
+	_J_bar_hands.setZero(_k,6);
+	_J_T_hands.setZero(_k, 6);
+
+	_x_hand.setZero(6);
+	_xdot_hand.setZero(6);
+
+	_bool_plan.setZero(30);
+
+	_q_home.setZero(_k);
+	_q_home(0) = 0;
+	_q_home(1) = -M_PI_4;
+	_q_home(2) = 0;
+	_q_home(3) = -3 * M_PI_4;
+	_q_home(4) = 0;
+	_q_home(5) = M_PI_2;
+	_q_home(6) = M_PI_4;
+
+	_start_time = 0.0;
+	_end_time = 0.0;
+	_motion_time = 0.0;
+
+	_bool_joint_motion = false;
+	_bool_ee_motion = false;
+
+	_q_des.setZero(_k);
+	_qdot_des.setZero(_k);
+	_q_goal.setZero(_k);
+	_qdot_goal.setZero(_k);
+
+	_x_des_hand.setZero(6);
+	_xdot_des_hand.setZero(6);
+	_x_goal_hand.setZero(6);
+	_xdot_goal_hand.setZero(6);
+
+	_pos_goal_hand.setZero(); // 3x1 
+	_rpy_goal_hand.setZero(); // 3x1
+	JointTrajectory.set_size(_k);
+	_A_diagonal.setZero(_k,_k);
+
+	_x_err_hand.setZero(6);
+	_x_dot_err_hand.setZero(6);
+	_R_des_hand.setZero();
+
+	_I.setIdentity(7,7);
+	_J_null.setZero(_k,_k);
+
+	_pre_q.setZero(7);
+	_pre_qdot.setZero(7);
+
+	_q_order.setZero(7);
+	_qdot_order.setZero(7);
+
+	_cnt_plan = 0;
+	_bool_plan(_cnt_plan) = 1;
+}
+
 void CController::read(double t, double* q, double* qdot)
 {	
 	_t = t;
@@ -180,7 +257,7 @@ void CController::motionPlan()
 	{
 		if(_cnt_plan == 0)
 		{	
-			cout << "plan: " << _cnt_plan << endl;
+			// cout << "plan: " << _cnt_plan << endl;
 			_q_order(0) = _q_home(0);
 			_q_order(1) = _q_home(1);
 			_q_order(2) = _q_home(2);
@@ -188,65 +265,18 @@ void CController::motionPlan()
 			_q_order(4) = _q_home(4);
 			_q_order(5) = _q_home(5);
 			_q_order(6) = _q_home(6);		                    
-			reset_target(10.0, _q_order, _qdot);
+			reset_target(5.0, _q_order, _qdot);
 			_cnt_plan++;
 		}
-
-		else if(_cnt_plan == 1)
+		else
 		{
-			cout << "plan: " << _cnt_plan << endl;
-
-			// _q_order(0) = 0.742;
-			// _q_order(1) = -1.83;
-			// _q_order(2) = -2.97;
-			// _q_order(3) = -3.14;
-			// _q_order(4) = -2.79;
-			// _q_order(5) = 0.478;
-			// _q_order(6) = 0.565;
-			// reset_target(10.0, _q_order, _qdot);
-
-			Vector3d target_pos;
-			Vector3d target_ori;
-			target_pos(0) = _x_hand(0) + 0.1;
-			target_pos(1) = _x_hand(1) + 0.1;
-			target_pos(2) = _x_hand(2) + 0.1;
-			target_ori(0) = _x_hand(3);
-			target_ori(1) = _x_hand(4);
-			target_ori(2) = _x_hand(5);
-
- 			reset_target(10.0, target_pos, target_ori);
-			_cnt_plan++;
-		}
-		else if(_cnt_plan == 2)
-		{
-			cout << "plan: " << _cnt_plan << endl;
-
-			Vector3d target_pos;
-			Vector3d target_ori;
-			target_pos(0) = _x_hand(0) - 0.05;
-			target_pos(1) = _x_hand(1) - 0.05;
-			target_pos(2) = _x_hand(2) - 0.05;
-			target_ori(0) = _x_hand(3);
-			target_ori(1) = _x_hand(4);
-			target_ori(2) = _x_hand(5);
-
- 			reset_target(10.0, target_pos, target_ori);
-			_cnt_plan++;			
-		}
-		else if(_cnt_plan == 3)
-		{
-			cout << "plan: " << _cnt_plan << endl;
+			// cout << "plan: random sampled EE" << endl;
 
 			VectorXd target_pose;
 			target_pose.setZero(6);
-			target_pose(0) = _x_hand(0) - 0.1;
-			target_pose(1) = _x_hand(1) + 0.05;
-			target_pose(2) = _x_hand(2) + 0.05;
-			target_pose(3) = _x_hand(3);
-			target_pose(4) = _x_hand(4);
-			target_pose(5) = _x_hand(5);
+			target_pose = get_random_sampled_EE();
 
- 			reset_target(10.0, target_pose);
+			reset_target(5.0, target_pose);
 			_cnt_plan++;
 		}
 		
@@ -355,81 +385,63 @@ void CController::OperationalSpaceControl()
 	_torque = (_J_T_hands * _Lambda * F_command_star + Model._bg) + _J_null * Model._A * (_qdot_des-_qdot);
 }
 
-void CController::Initialize()
+// for pybind11
+int CController::count_plan_pybind()
 {
-    _control_mode = 1; //1: joint space, 2: task space(CLIK), 3: operational space
+	return _cnt_plan;
+}
 
-	_bool_init = true;
-	_t = 0.0;
-	_init_t = 0.0;
-	_pre_t = 0.0;
-	_dt = 0.0;
+// for pybind11
+void CController::write_qpos_init_pybind(std::array<double, 9> _q_init)
+{
+	for (int i = 0; i < _k; ++i)
+	{
+		_q_home[i] = _q_init[i];
+	}
+}
 
-	_kpj = 400.0;
-	_kdj = 20.0;
+// for pybind11
+std::array<double, 9> CController::get_joint_position_pybind()
+{
+	std::array<double, 9> _q_pybind;
 
-	_x_kp = 1;
-	_x_kd = 1;
+	for (int i = 0; i < _k; ++i)
+	{
+		_q_pybind[i] = _q[i];
+	}
+	for (int i = 0; i < 2; ++i)
+	{
+		_q_pybind[i] = 0;
+	}
 
-    _q.setZero(_k);
-	_qdot.setZero(_k);
-	_torque.setZero(_k);
+	return _q_pybind;
+}
 
-	_J_hands.setZero(6,_k);
-	_J_bar_hands.setZero(_k,6);
-	_J_T_hands.setZero(_k, 6);
+// for pybind11
+std::array<double, 6> CController::get_EE_pybind()
+{
+	std::array<double, 6> EE_pybind;
 
-	_x_hand.setZero(6);
-	_xdot_hand.setZero(6);
+	for (int i = 0; i < 6; ++i)
+	{
+		EE_pybind[i] = _x_hand[i];
+	}
 
-	_bool_plan.setZero(30);
+	return EE_pybind;
+}
 
-	_q_home.setZero(_k);
-	_q_home(0) = 0;
-	_q_home(1) = -M_PI_4;
-	_q_home(2) = 0;
-	_q_home(3) = -3 * M_PI_4;
-	_q_home(4) = 0;
-	_q_home(5) = M_PI_2;
-	_q_home(6) = M_PI_4;
+// for pybind11
+void CController::write_random_sampled_EE_pybind(std::array<double, 6> sampled_EE)
+{
+	for(int i = 0; i < 6; ++i)
+	{
+		random_sampled_EE[i] = sampled_EE[i];
+	}
+}
 
-	_start_time = 0.0;
-	_end_time = 0.0;
-	_motion_time = 0.0;
-
-	_bool_joint_motion = false;
-	_bool_ee_motion = false;
-
-	_q_des.setZero(_k);
-	_qdot_des.setZero(_k);
-	_q_goal.setZero(_k);
-	_qdot_goal.setZero(_k);
-
-	_x_des_hand.setZero(6);
-	_xdot_des_hand.setZero(6);
-	_x_goal_hand.setZero(6);
-	_xdot_goal_hand.setZero(6);
-
-	_pos_goal_hand.setZero(); // 3x1 
-	_rpy_goal_hand.setZero(); // 3x1
-	JointTrajectory.set_size(_k);
-	_A_diagonal.setZero(_k,_k);
-
-	_x_err_hand.setZero(6);
-	_x_dot_err_hand.setZero(6);
-	_R_des_hand.setZero();
-
-	_I.setIdentity(7,7);
-	_J_null.setZero(_k,_k);
-
-	_pre_q.setZero(7);
-	_pre_qdot.setZero(7);
-
-	_q_order.setZero(7);
-	_qdot_order.setZero(7);
-
-	_cnt_plan = 0;
-	_bool_plan(_cnt_plan) = 1;
+Eigen::Vector<double, 6> CController::get_random_sampled_EE()
+{
+	return random_sampled_EE;
 }
 
 // for pybind11
@@ -440,10 +452,15 @@ PYBIND11_MODULE(controller, m)
 
 	py::class_<CController>(m, "CController")
 		.def(py::init<>())
+		.def("initialize", &CController::Initialize)
 		.def("read", &CController::read_pybind)
 		.def("control_mujoco", &CController::control_mujoco)
 		.def("write", &CController::write_pybind)
-		.def("initialize", &CController::Initialize)
+		.def("count_plan", &CController::count_plan_pybind)
+		.def("write_qpos_init", &CController::write_qpos_init_pybind)
+		.def("get_joint_position", &CController::get_joint_position_pybind)
+		.def("get_EE", &CController::get_EE_pybind)
+		.def("write_random_sampled_EE", &CController::write_random_sampled_EE_pybind)
 		;
 
 #ifdef VERSION_INFO
