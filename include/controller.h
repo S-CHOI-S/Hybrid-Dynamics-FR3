@@ -37,6 +37,7 @@ public:
     // for pybind11
     void read_pybind(double t, array<double, 9> q, array<double, 9> qdot, double timestep);
     std::vector<double> write_pybind();
+    std::array<double, 6> get_desired_EE_pybind();
     std::array<double, 6> get_EE_pybind();
     int count_plan_pybind();
     std::array<double, 9> get_joint_position_pybind();

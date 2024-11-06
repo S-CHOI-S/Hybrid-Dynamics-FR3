@@ -41,9 +41,13 @@ class DataCollector:
         self.data.append(values)
 
     def save_to_csv(self, filename="data.csv"):
-        # DataFrame으로 변환 후 CSV로 저장
-        df = pd.DataFrame(self.data, columns=["q1", "q2", "q3", "q4", "q5", "q6", "q7", 
+        # q, dq, ddq, command_tau, desired_EE, EE, tau
+        df = pd.DataFrame(self.data, columns=["done",
+                                              "q1", "q2", "q3", "q4", "q5", "q6", "q7", 
                                               "dq1", "dq2", "dq3", "dq4", "dq5", "dq6", "dq7", 
+                                              "ddq1", "ddq2", "ddq3", "ddq4", "ddq5", "ddq6", "ddq7", 
+                                              "des_tau1", "des_tau2", "des_tau3", "des_tau4", "des_tau5", "des_tau6", "des_tau7", 
+                                              "des_EE_x", "des_EE_y", "des_EE_z", "des_EE_roll", "des_EE_pitch", "des_EE_yaw",
                                               "EE_x", "EE_y", "EE_z", "EE_roll", "EE_pitch", "EE_yaw",
                                               "tau1", "tau2", "tau3", "tau4", "tau5", "tau6", "tau7"])
         df.to_csv(filename, index=False)
@@ -80,6 +84,7 @@ class sim_env:
         print(f"Episode Num: {self.episode_num}")
         self.start_time = self.data.time
         self.episode_time = 100
+        self.done_int = 0
 
         self.controller.initialize()
         
@@ -154,9 +159,11 @@ class sim_env:
         self.time_done = self.data.time - self.start_time >= self.episode_time
         
         if self.bound_done or self.time_done:
+            self.done_int = 1
             self.episode_num += 1
             return True
         else:
+            self.done_int = 0
             return False
         
     def info(self):
@@ -189,9 +196,12 @@ class sim_env:
     def collect_data(self):
         q = self.data.qpos[:self.k]  # 조인트 위치
         dq = self.data.qvel[:self.k]  # 조인트 속도
+        ddq = self.data.qacc[:self.k]  # 조인트 가속도
+        command_tau = self._torque[:self.k] # 조인트 토크
+        desired_EE = self.controller.get_desired_EE()
         EE = self.controller.get_EE()  # End-Effector 위치
-        tau = self.data.ctrl[:self.k]  # 각 조인트의 토크 값
+        tau = self.data.qfrc_actuator[:self.k]  # 각 조인트의 토크 값(state)
 
-        data_to_collect = list(q) + list(dq) + list(EE) + list(tau)
+        data_to_collect = [self.done_int] + list(q) + list(dq) + list(ddq) + list(command_tau) + list(desired_EE) + list(EE) + list(tau)
 
         self.data_collector.collect(data_to_collect)

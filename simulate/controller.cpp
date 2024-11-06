@@ -418,6 +418,19 @@ std::array<double, 9> CController::get_joint_position_pybind()
 }
 
 // for pybind11
+std::array<double, 6> CController::get_desired_EE_pybind()
+{
+	std::array<double, 6> desired_EE_pybind;
+
+	for (int i = 0; i < 6; ++i)
+	{
+		desired_EE_pybind[i] = _x_des_hand[i];
+	}
+
+	return desired_EE_pybind;
+}
+
+// for pybind11
 std::array<double, 6> CController::get_EE_pybind()
 {
 	std::array<double, 6> EE_pybind;
@@ -459,6 +472,7 @@ PYBIND11_MODULE(controller, m)
 		.def("count_plan", &CController::count_plan_pybind)
 		.def("write_qpos_init", &CController::write_qpos_init_pybind)
 		.def("get_joint_position", &CController::get_joint_position_pybind)
+		.def("get_desired_EE", &CController::get_desired_EE_pybind)
 		.def("get_EE", &CController::get_EE_pybind)
 		.def("write_random_sampled_EE", &CController::write_random_sampled_EE_pybind)
 		;
