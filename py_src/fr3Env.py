@@ -132,8 +132,8 @@ class sim_env:
         done = self.done()
         info = self.info()
 
-        if int(self.data.time * 100) % 10 == 0:
-            self.collect_data()
+        # if int(self.data.time * 100) % 10 == 0:
+        #     self.collect_data()
 
         return obs, reward, done, info
     
@@ -160,6 +160,7 @@ class sim_env:
         
         if self.bound_done or self.time_done:
             self.done_int = 1
+            self.collect_data()
             self.episode_num += 1
             return True
         else:
@@ -205,3 +206,6 @@ class sim_env:
         data_to_collect = [self.done_int] + list(q) + list(dq) + list(ddq) + list(command_tau) + list(desired_EE) + list(EE) + list(tau)
 
         self.data_collector.collect(data_to_collect)
+        
+        if self.done_int == 1:
+            print("done: 1")
