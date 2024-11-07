@@ -22,7 +22,7 @@ def main():
         obs, reward, done, _ = env.step()
         if done:
             env.reset()
-            if env.episode_num == 10:
+            if env.episode_num == 1e6:
                 break
 
     env.data_collector.save_to_csv()
