@@ -90,7 +90,8 @@ def main(model_path, test_csv):
     hidden_size = 64
     output_size = 7
     model = MLP(input_size, hidden_size, output_size, device).to(device)
-    model.load_state_dict(torch.load(model_path))
+    # model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
 
     # 예측 수행
