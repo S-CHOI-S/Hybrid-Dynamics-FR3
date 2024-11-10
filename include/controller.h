@@ -44,6 +44,7 @@ public:
     void write_random_sampled_EE_pybind(std::array<double, 6> sampled_EE);
     Eigen::Vector<double, 6> random_sampled_EE;
     void write_qpos_init_pybind(std::array<double, 9> _q_init);
+    bool check_trajectory_complete_pybind();
 
 private:
     

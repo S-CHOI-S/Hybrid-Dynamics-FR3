@@ -40,7 +40,7 @@ class DataCollector:
         # 데이터를 수집
         self.data.append(values)
 
-    def save_to_csv(self, filename="data.csv"):
+    def save_to_csv(self, filename="data.csv", append=False):
         # q, dq, ddq, command_tau, desired_EE, EE, tau
         df = pd.DataFrame(self.data, columns=["done",
                                               "q1", "q2", "q3", "q4", "q5", "q6", "q7", 
@@ -50,12 +50,18 @@ class DataCollector:
                                               "des_EE_x", "des_EE_y", "des_EE_z", "des_EE_roll", "des_EE_pitch", "des_EE_yaw",
                                               "EE_x", "EE_y", "EE_z", "EE_roll", "EE_pitch", "EE_yaw",
                                               "tau1", "tau2", "tau3", "tau4", "tau5", "tau6", "tau7"])
-        df.to_csv(filename, index=False)
+        if append:
+            df.to_csv(filename, mode='a', header=False, index=False)
+        else:
+            df.to_csv(filename, index=False)
         print("Data saved to", filename)
+
+        self.data = []
 
 ## env
 class sim_env:
     def __init__(self):
+        super(sim_env, self).__init__()
         self.k = 7
         self.dof = 9
         
@@ -71,7 +77,8 @@ class sim_env:
         self.q_soft_range = 0.9 * self.q_range
         self.qdot_range = np.array([[-2.1750, 2.1750], [-2.1750, 2.1750], [-2.1750, 2.1750], [-2.1750, 2.1750],
                                     [-2.61, 2.61], [-2.61, 2.61], [-2.61, 2.61]])
-        self.tau_range = np.array([[0, 87], [0, 87], [0, 87], [0, 87], [0, 12], [0, 12], [0, 12]])
+        self.tau_range = np.array([[-87, 87], [-87, 87], [-87, 87], [-87, 87], [-87, 87], [-12, 12], [-12, 12], [-100, 100]])
+        self.random_sampled_EE = [0.30689056659294117, -4.480957754469757e-12, 0.6972820523028392, 3.1415926535848966, -4.8965455623439355e-12, -0.7853981634043731]
 
         self.viewer = None
         self.rendering = True
@@ -108,18 +115,19 @@ class sim_env:
 
         self.bound_done = False
         self.time_done = False
+        self.torque_done = False
 
         if self.rendering:
             self.render()
 
     def step(self, action=None):
-        if self.controller.count_plan() > 0:
-            random_sampled_EE = self.sampling_EE()
-            self.controller.write_random_sampled_EE(random_sampled_EE)
+        if self.controller.count_plan() > 0 and self.controller.check_trajectory_complete():
+            self.random_sampled_EE = self.sampling_EE()
+            self.controller.write_random_sampled_EE(self.random_sampled_EE)
         self.controller.read(self.data.time, self.data.qpos, self.data.qvel, self.model.opt.timestep)
         self.controller.control_mujoco()
         self._torque = self.controller.write()
-
+        
         for i in range(self.dof - 1):
             self.data.ctrl[i] = self._torque[i]
         mujoco.mj_step(self.model, self.data)
@@ -157,10 +165,18 @@ class sim_env:
 
         # time done
         self.time_done = self.data.time - self.start_time >= self.episode_time
+
+        # high torque
+        tau_threshold_lower = self.tau_range[:, 0] * 0.7
+        tau_threshold_upper = self.tau_range[:, 1] * 0.7
+
+        if np.any((self._torque < tau_threshold_lower) | (self._torque > tau_threshold_upper)):
+            self.torque_done = True
         
-        if self.bound_done:
+        if self.bound_done or self.torque_done:
             self.done_int = 1
             self.collect_data()
+            self.data_collector.save_to_csv(filename="data_test3.csv", append=True)
             self.episode_num += 1
             return True
         else:
@@ -199,13 +215,14 @@ class sim_env:
         dq = self.data.qvel[:self.k]  # 조인트 속도
         ddq = self.data.qacc[:self.k]  # 조인트 가속도
         command_tau = self._torque[:self.k] # 조인트 토크
-        desired_EE = self.controller.get_desired_EE()
+        desired_EE = self.random_sampled_EE
         EE = self.controller.get_EE()  # End-Effector 위치
         tau = self.data.qfrc_actuator[:self.k]  # 각 조인트의 토크 값(state)
 
         data_to_collect = [self.done_int] + list(q) + list(dq) + list(ddq) + list(command_tau) + list(desired_EE) + list(EE) + list(tau)
 
-        self.data_collector.collect(data_to_collect)
+        if np.any(desired_EE) != 0:
+            self.data_collector.collect(data_to_collect)
         
         # if self.done_int == 1:
         #     print("done: 1")

@@ -84,6 +84,8 @@ void CController::Initialize()
 	_q_order.setZero(7);
 	_qdot_order.setZero(7);
 
+	random_sampled_EE.setZero();
+
 	_cnt_plan = 0;
 	_bool_plan(_cnt_plan) = 1;
 }
@@ -458,6 +460,12 @@ Eigen::Vector<double, 6> CController::get_random_sampled_EE()
 }
 
 // for pybind11
+bool CController::check_trajectory_complete_pybind()
+{
+	return _bool_init;
+}
+
+// for pybind11
 namespace py = pybind11;
 PYBIND11_MODULE(controller, m)
 {
@@ -475,6 +483,7 @@ PYBIND11_MODULE(controller, m)
 		.def("get_desired_EE", &CController::get_desired_EE_pybind)
 		.def("get_EE", &CController::get_EE_pybind)
 		.def("write_random_sampled_EE", &CController::write_random_sampled_EE_pybind)
+		.def("check_trajectory_complete", &CController::check_trajectory_complete_pybind)
 		;
 
 #ifdef VERSION_INFO

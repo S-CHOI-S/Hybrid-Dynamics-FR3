@@ -25,7 +25,5 @@ def main():
             if env.episode_num == 1e6:
                 break
 
-    env.data_collector.save_to_csv()
-
 if __name__ == "__main__":
     main()
