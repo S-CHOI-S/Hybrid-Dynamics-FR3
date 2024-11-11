@@ -15,10 +15,7 @@ def load_test_data(filename):
     # 입력 데이터 (X)와 실제 출력 데이터 (Y)도 함께 로드합니다 (ground truth 포함)
     X = df[["q1", "q2", "q3", "q4", "q5", "q6", "q7",
             "dq1", "dq2", "dq3", "dq4", "dq5", "dq6", "dq7",
-            "ddq1", "ddq2", "ddq3", "ddq4", "ddq5", "ddq6", "ddq7",
-            "des_tau1", "des_tau2", "des_tau3", "des_tau4", "des_tau5", "des_tau6", "des_tau7",
-            "des_EE_x", "des_EE_y", "des_EE_z", "des_EE_roll", "des_EE_pitch", "des_EE_yaw",
-            "EE_x", "EE_y", "EE_z", "EE_roll", "EE_pitch", "EE_yaw"]].values
+            "des_EE_x", "des_EE_y", "des_EE_z", "des_EE_roll", "des_EE_pitch", "des_EE_yaw"]].values
 
     Y = df[["tau1", "tau2", "tau3", "tau4", "tau5", "tau6", "tau7"]].values
 
@@ -86,13 +83,14 @@ def main(model_path, test_csv):
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
     
     # 모델 로드
-    input_size = 40
+    input_size = 20
     hidden_size = 64
     output_size = 7
     model = MLP(input_size, hidden_size, output_size, device).to(device)
     # model.load_state_dict(torch.load(model_path))
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
+    print(model)
 
     # 예측 수행
     predictions = predict(model, test_loader, device)
@@ -105,6 +103,7 @@ def main(model_path, test_csv):
     plot_results(Y_test.numpy(), predictions)
 
 if __name__ == "__main__":
-    model_path = "model/mlp_model_0.02.pth"  # 학습된 모델 경로
-    test_csv = "data/data_test2.csv"  # 테스트 데이터 경로
-    main(model_path, test_csv)
+    model_path = "model/mlp_model_0.02_wo_des_torque.pth"  # 학습된 모델 경로
+    for i in range(10):
+        test_csv = f"data/data_test{i+1}.csv"  # 테스트 데이터 경로
+        main(model_path, test_csv)

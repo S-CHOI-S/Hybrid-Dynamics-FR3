@@ -176,7 +176,7 @@ class sim_env:
         if self.bound_done or self.torque_done:
             self.done_int = 1
             self.collect_data()
-            self.data_collector.save_to_csv(filename="data_test3.csv", append=True)
+            self.data_collector.save_to_csv(filename="data/data_test10.csv", append=True)
             self.episode_num += 1
             return True
         else:
