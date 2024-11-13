@@ -43,10 +43,10 @@ class DataCollector:
     def save_to_csv(self, filename="data.csv", append=False):
         # q, dq, ddq, command_tau, desired_EE, EE, tau
         df = pd.DataFrame(self.data, columns=["done",
-                                              "q1", "q2", "q3", "q4", "q5", "q6", "q7", 
-                                              "dq1", "dq2", "dq3", "dq4", "dq5", "dq6", "dq7", 
-                                              "ddq1", "ddq2", "ddq3", "ddq4", "ddq5", "ddq6", "ddq7", 
-                                              "des_tau1", "des_tau2", "des_tau3", "des_tau4", "des_tau5", "des_tau6", "des_tau7", 
+                                              "q1", "q2", "q3", "q4", "q5", "q6", "q7",
+                                              "dq1", "dq2", "dq3", "dq4", "dq5", "dq6", "dq7",
+                                              "ddq1", "ddq2", "ddq3", "ddq4", "ddq5", "ddq6", "ddq7",
+                                              "des_tau1", "des_tau2", "des_tau3", "des_tau4", "des_tau5", "des_tau6", "des_tau7",
                                               "des_EE_x", "des_EE_y", "des_EE_z", "des_EE_roll", "des_EE_pitch", "des_EE_yaw",
                                               "EE_x", "EE_y", "EE_z", "EE_roll", "EE_pitch", "EE_yaw",
                                               "tau1", "tau2", "tau3", "tau4", "tau5", "tau6", "tau7"])
@@ -176,7 +176,7 @@ class sim_env:
         if self.bound_done or self.torque_done:
             self.done_int = 1
             self.collect_data()
-            self.data_collector.save_to_csv(filename="data/data_test10.csv", append=True)
+            self.data_collector.save_to_csv(filename="data/data.csv", append=True)
             self.episode_num += 1
             return True
         else:
