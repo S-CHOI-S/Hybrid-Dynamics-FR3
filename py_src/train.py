@@ -34,7 +34,7 @@ def plot_loss(train_losses, val_losses, save_path):
     print("Loss plot saved as 'loss_plot.png'")
     plt.show()
     
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, num_epochs=500):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, num_epochs=1000):
     early_stopping = EarlyStopping(patience=10)
     best_model = None
     best_val_loss = float('inf')
