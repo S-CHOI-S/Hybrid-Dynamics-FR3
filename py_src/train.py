@@ -34,7 +34,7 @@ def plot_loss(train_losses, val_losses, save_path):
     print("Loss plot saved as 'loss_plot.png'")
     plt.show()
     
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, num_epochs=1000):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, num_epochs=500):
     early_stopping = EarlyStopping(patience=10)
     best_model = None
     best_val_loss = float('inf')
@@ -81,10 +81,14 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             best_model = model.state_dict()
-
+    
     model.load_state_dict(best_model)
-
-    return model, train_losses, val_loss
+            
+    min_len = min(len(train_losses), len(val_losses))
+    train_losses = train_losses[:min_len]
+    val_losses = val_losses[:min_len]
+ 
+    return model, train_losses, val_losses
 
 def main(model_dir, train_csv):
     X, Y = load_data(train_csv)
@@ -119,7 +123,7 @@ def main(model_dir, train_csv):
     plot_loss(train_losses, val_losses, model_dir)
 
 if __name__ == "__main__":
-    model_dir = "model/mlp_qdq"
+    model_dir = "model/mlp_qdq_normalize"
     train_csv = "data/data.csv"
     main(model_dir, train_csv)
 
