@@ -3,18 +3,43 @@ import pandas as pd
 import numpy as np
 
 joint_ranges = {
-    "q1": [-1.7837, 1.7837],
-    "q2": [-2.9007, 2.9007],
+    "q1": [-1.7837,  1.7837],
+    "q2": [-2.9007,  2.9007],
     "q3": [-3.0421, -0.1518],
-    "q4": [-2.8065, 2.8065],
-    "q5": [0.5445, 4.5169],
-    "q6": [-3.0159, 3.0159],
-    "q7": [-3.0159, 3.0159]
+    "q4": [-2.8065,  2.8065],
+    "q5": [ 0.5445,  4.5169],
+    "q6": [-3.0159,  3.0159],
+    "q7": [-3.0159,  3.0159]
+}
+
+torque_ranges = {
+    "tau1": [-87, 87],
+    "tau2": [-87, 87],
+    "tau3": [-87, 87],
+    "tau4": [-87, 87],
+    "tau5": [-87, 87],
+    "tau6": [-12, 12],
+    "tau7": [-12, 12]
 }
 
 def normalize_position(q, joint_name):
     min_val, max_val = joint_ranges[joint_name]
     return (q - min_val) / (max_val - min_val) * 2 - 1  # [-1, 1] 범위로 변환
+
+def normalize_velocity(dq):
+    return (dq - (-2.1750)) / (2.1750 - (-2.1750)) * 2 - 1
+
+def normalize_torque(tau, joint_name):
+    min_val, max_val = torque_ranges[joint_name]
+    min_val *= 0.7
+    max_val *= 0.7
+    return (tau - min_val) / (max_val - min_val) * 2 - 1
+
+def unnormalize_torque(norm_tau, joint_name):
+    min_val, max_val = torque_ranges[joint_name]
+    min_val /= 0.7
+    max_val /= 0.7
+    return (norm_tau + 1) / 2 * (max_val - min_val) + min_val
 
 def load_data(filename):
     df = pd.read_csv(filename)
@@ -23,7 +48,12 @@ def load_data(filename):
     
     for i in range(1, 8):
         joint_name = f"q{i}"
+        joint_velocity_name = f"dq{i}"
+        torque_name = f"tau{i}"
+        
         df[joint_name] = df[joint_name].apply(lambda q: normalize_position(q, joint_name))
+        # df[joint_velocity_name] = df[joint_velocity_name].apply(lambda dq: normalize_velocity(dq))
+        # df[torque_name] = df[torque_name].apply(lambda tau: normalize_torque(tau, torque_name))
     
     X = df[["q1", "q2", "q3", "q4", "q5", "q6", "q7",
             "dq1", "dq2", "dq3", "dq4", "dq5", "dq6", "dq7",

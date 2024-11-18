@@ -34,13 +34,15 @@ def plot_loss(train_losses, val_losses, save_path):
     print("Loss plot saved as 'loss_plot.png'")
     plt.show()
     
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, num_epochs=500):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, model_dir, num_epochs=1000):
     early_stopping = EarlyStopping(patience=10)
     best_model = None
     best_val_loss = float('inf')
 
     train_losses = []
     val_losses = []
+
+    os.makedirs(model_dir, exist_ok=True)
 
     for epoch in range(num_epochs):
         model.train()
@@ -74,22 +76,34 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
 
         print(f"Epoch [{epoch+1}/{num_epochs}] - Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
 
-        if early_stopping.step(val_loss):
+        # Early stopping 체크
+        early_stopping.step(val_loss)
+        if early_stopping.stop():
             print(f"Early stopping at epoch {epoch+1}")
             break
 
+        # 최적의 모델 저장
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             best_model = model.state_dict()
-    
+            torch.save(best_model, f"{model_dir}/best_model.pth")
+            print(f"Best model saved at epoch {epoch+1}")
+
+        # 50 에포크마다 모델 저장
+        if (epoch + 1) % 50 == 0:
+            checkpoint_path = f"{model_dir}/model_epoch_{epoch+1}.pth"
+            torch.save(model.state_dict(), checkpoint_path)
+            print(f"Checkpoint saved at epoch {epoch+1}")
+
+    # 마지막으로 최적의 모델 로드
     model.load_state_dict(best_model)
-            
+    
     min_len = min(len(train_losses), len(val_losses))
     train_losses = train_losses[:min_len]
     val_losses = val_losses[:min_len]
- 
+    
     return model, train_losses, val_losses
-
+    
 def main(model_dir, train_csv):
     X, Y = load_data(train_csv)
 
@@ -113,17 +127,18 @@ def main(model_dir, train_csv):
     optimizer = optim.Adam(model.parameters(), lr=0.01)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9)
 
-    trained_model, train_losses, val_losses = train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device)
+    trained_model, train_losses, val_losses = train_model(
+        model, train_loader, val_loader, criterion, optimizer, scheduler, device, model_dir
+    )
     
-    model_path = model_dir + "/model.pth"
-    os.makedirs(model_dir, exist_ok=True)
+    model_path = model_dir + "/final_model.pth"
     torch.save(trained_model.state_dict(), model_path)
-    print(f"Model saved to {model_path}")
+    print(f"Final model saved to {model_path}")
     
     plot_loss(train_losses, val_losses, model_dir)
 
 if __name__ == "__main__":
-    model_dir = "model/mlp_qdq_normalize"
+    model_dir = "model/mlp_qdq_normalize2"
     train_csv = "data/data.csv"
     main(model_dir, train_csv)
 
