@@ -39,15 +39,18 @@ public:
     std::vector<double> write_pybind();
     std::array<double, 6> get_desired_EE_pybind();
     std::array<double, 6> get_EE_pybind();
+    bool is_RL_mode();
     int count_plan_pybind();
     std::array<double, 9> get_joint_position_pybind();
     void write_random_sampled_EE_pybind(std::array<double, 6> sampled_EE);
     Eigen::Vector<double, 6> random_sampled_EE;
+    void write_desired_joint_pybind(std::array<double, 7> q, std::array<double, 7> dq);
+    Eigen::Vector<double, 7> q_rl;
+    Eigen::Vector<double, 7> dq_rl;
     void write_qpos_init_pybind(std::array<double, 9> _q_init);
     bool check_trajectory_complete_pybind();
 
 private:
-    
     void ModelUpdate();
     void motionPlan();
 
@@ -118,6 +121,9 @@ private:
     // for pybind11
     std::vector<double> pybind_torque;
     Eigen::Vector<double, 6> get_random_sampled_EE();
+
+    // for RL
+    bool RL = false;
 };
 
 #endif

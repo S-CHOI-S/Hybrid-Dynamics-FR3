@@ -35,7 +35,7 @@ def plot_loss(train_losses, val_losses, save_path):
     plt.show()
     
 def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, model_dir, num_epochs=1000):
-    early_stopping = EarlyStopping(patience=10)
+    early_stopping = EarlyStopping(patience=20)
     best_model = None
     best_val_loss = float('inf')
 
@@ -103,7 +103,15 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
     val_losses = val_losses[:min_len]
     
     return model, train_losses, val_losses
-    
+
+def custom_loss(outputs, targets):
+    pose_loss = nn.MSELoss()(outputs[:, :6], targets[:, :6])
+    torque_loss = nn.MSELoss()(outputs[:, 6:], targets[:, 6:])
+
+    total_loss = torque_loss + 0.1 * pose_loss
+    return total_loss
+
+
 def main(model_dir, train_csv):
     X, Y = load_data(train_csv)
 
@@ -122,9 +130,19 @@ def main(model_dir, train_csv):
     hidden_size = 64
 
     model = MLP(X.shape[1], hidden_size, Y.shape[1], device).to(device)
+    
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    BLUE = "\033[34m"
+    MAGENTA = "\033[35m"
+    CYAN = "\033[36m"
+    RESET = "\033[0m"
+    print(f"{YELLOW}input size: {RESET}{X.shape[1]}\t{YELLOW}output size: {RESET}{Y.shape[1]}")
 
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    # criterion = nn.MSELoss()
+    criterion = custom_loss
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9)
 
     trained_model, train_losses, val_losses = train_model(
@@ -138,7 +156,7 @@ def main(model_dir, train_csv):
     plot_loss(train_losses, val_losses, model_dir)
 
 if __name__ == "__main__":
-    model_dir = "model/mlp_qdq_normalize2"
+    model_dir = "model/mlp_qdq_EEtorque"
     train_csv = "data/data.csv"
     main(model_dir, train_csv)
 
